@@ -1,0 +1,69 @@
+From b8e28118913f1ae3e8a89d38287599de7302e351 Mon Sep 17 00:00:00 2001
+From: Myy <myy@miouyouyou.fr>
+Date: Sat, 12 Nov 2016 23:29:52 +0000
+Subject: [PATCH 4/4] Last corrections
+
+---
+ drivers/gpu/arm/midgard/mali_kbase_mem.c | 8 +++++---
+ drivers/video/fbdev/core/fbmem.c         | 2 ++
+ include/uapi/linux/fb.h                  | 2 +-
+ 3 files changed, 8 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/gpu/arm/midgard/mali_kbase_mem.c b/drivers/gpu/arm/midgard/mali_kbase_mem.c
+index 8fd1e0a..1167fd2 100644
+--- a/drivers/gpu/arm/midgard/mali_kbase_mem.c
++++ b/drivers/gpu/arm/midgard/mali_kbase_mem.c
+@@ -2027,6 +2027,7 @@ static int kbase_jd_user_buf_map(struct kbase_context *kctx,
+ 	struct device *dev;
+ 	unsigned long offset;
+ 	unsigned long local_size;
++  unsigned int user_pages_flags = 0;
+ 
+ 	alloc = reg->gpu_alloc;
+ 	pa = kbase_get_gpu_phy_pages(reg);
+@@ -2044,12 +2045,13 @@ static int kbase_jd_user_buf_map(struct kbase_context *kctx,
+ 			reg->flags & KBASE_REG_GPU_WR,
+ 			0, pages, NULL);
+ #else
+-  unsigned int flags = 0;
+-  if (reg->flags & KBASE_REG_GPU_WR) flags |= FOLL_WRITE;
++
++  if (reg->flags & KBASE_REG_GPU_WR)
++    user_pages_flags |= FOLL_WRITE;
+ 	pinned_pages = get_user_pages_remote(NULL, mm,
+ 			address,
+ 			alloc->imported.user_buf.nr_pages,
+-		  flags,
++		  user_pages_flags,
+ 		  pages, NULL);
+ #endif
+ 
+diff --git a/drivers/video/fbdev/core/fbmem.c b/drivers/video/fbdev/core/fbmem.c
+index 6d2cc49..b697e1d 100644
+--- a/drivers/video/fbdev/core/fbmem.c
++++ b/drivers/video/fbdev/core/fbmem.c
+@@ -33,6 +33,8 @@
+ #include <linux/efi.h>
+ #include <linux/fb.h>
+ 
++#include <linux/dma-buf.h>
++
+ #include <asm/fb.h>
+ 
+ 
+diff --git a/include/uapi/linux/fb.h b/include/uapi/linux/fb.h
+index ccf1ac1..5f6400a 100644
+--- a/include/uapi/linux/fb.h
++++ b/include/uapi/linux/fb.h
+@@ -34,7 +34,7 @@
+ #define FBIOPUT_MODEINFO        0x4617
+ #define FBIOGET_DISPINFO        0x4618
+ #define FBIO_WAITFORVSYNC	_IOW('F', 0x20, __u32)
+-#define FBIOGET_DMABUF _IOR('F', 0x21, struct_fb_dmabuf_export)
++#define FBIOGET_DMABUF _IOR('F', 0x21, struct fb_dmabuf_export)
+ 
+ #define FB_TYPE_PACKED_PIXELS		0	/* Packed Pixels	*/
+ #define FB_TYPE_PLANES			1	/* Non interleaved planes */
+-- 
+2.4.10
+
