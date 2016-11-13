@@ -80971,7 +80971,7 @@ c11b5e98 T __security_initcall_start
 c11b5e9c T __initramfs_start
 c11b5e9c t __irf_start
 c11b5e9c T __security_initcall_end
-c11b5f22 t __irf_end
+c11b5f21 t __irf_end
 c11b5f28 T __initramfs_size
 c11b6000 D __per_cpu_load
 c11b6000 D __per_cpu_start
