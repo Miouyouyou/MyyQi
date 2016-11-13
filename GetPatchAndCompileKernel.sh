@@ -19,10 +19,10 @@ rm -r TX011-SW-99002-$DRIVER_VERSION TX011-SW-99002-$DRIVER_VERSION.tgz
 # Mali driver
 export GITHUB_REPO=Miouyouyou/MyyQi
 export GIT_BRANCH=master
-wget https://raw.githubusercontent.com/$GITHUB_REPO/$GIT_BRANCH/patches/kernel-4.9-rc4/0001-Rockchip-DRM-and-Framebuffer-patches-from-ARM-softwa.patch &&
+#wget https://raw.githubusercontent.com/$GITHUB_REPO/$GIT_BRANCH/patches/kernel-4.9-rc4/0001-Rockchip-DRM-and-Framebuffer-patches-from-ARM-softwa.patch &&
 wget https://raw.githubusercontent.com/$GITHUB_REPO/$GIT_BRANCH/patches/kernel-4.9-rc4/0002-Integrate-the-Mali-GPU-address-to-the-rk3288-and-rk3.patch &&
 wget https://raw.githubusercontent.com/$GITHUB_REPO/$GIT_BRANCH/patches/kernel-4.9-rc4/0003-Post-Mali-Kernel-device-drivers-modifications.patch
-export PATCHES="0001-Rockchip-DRM-and-Framebuffer-patches-from-ARM-softwa.patch 0002-Integrate-the-Mali-GPU-address-to-the-rk3288-and-rk3.patch 0003-Post-Mali-Kernel-device-drivers-modifications.patch"
+export PATCHES="0002-Integrate-the-Mali-GPU-address-to-the-rk3288-and-rk3.patch 0003-Post-Mali-Kernel-device-drivers-modifications.patch"
 git apply $PATCHES &&
 rm $PATCHES
 unset PATCHES
