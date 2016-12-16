@@ -1,9 +1,9 @@
 About
 -----
 
-This is a working patched 4.9 kernel with Mali r15p0 Kernel drivers, using the torvalds branch as a basis.
+This is a working patched 4.9 kernel with [Mali r15p0 Kernel drivers](http://malideveloper.arm.com/resources/drivers/open-source-mali-midgard-gpu-kernel-drivers/), using the torvalds branch as a basis.
 
-Currently this kernel has been tested sucessfully with Mali User-space r12p0 drivers for fbdev and wayland, using the OpenGL ES 3.1 samples of the Mali OpenGL ES SDK.
+Currently this kernel has been tested sucessfully with the [Firefly's Mali User-space r12p0 drivers for fbdev and wayland](http://malideveloper.arm.com/resources/drivers/arm-mali-midgard-gpu-user-space-drivers/#mali-user-space-driver-r12p0-mali-t760-gnulinux), using the [OpenGL ES 3.1 samples of the Mali OpenGL ES SDK](http://malideveloper.arm.com/resources/sdks/opengl-es-sdk-for-linux/).
 
 X11 drivers were not tested successfully however.
 
@@ -61,14 +61,14 @@ wget -O .config 'https://raw.githubusercontent.com/Miouyouyou/MyyQi/master/boot/
 make rk3288-miqi.dtb zImage modules -j5
 ```
 
-This procedure was stored in the GetPatchAndCompileKernel.sh file and can be run like this :
+This procedure was stored in the **[GetPatchAndCompileKernel.sh](./GetPatchAndCompileKernel.sh)** file and can be run like this :
 ```bash
 sh GetPatchAndCompileKernel.sh
 ```
 
 You will need compiling tools, **git**, **wget** and **find** in order to execute this procedure successfully.
 
-The patches applied are stored in the **patches/** folder.
+The patches applied are stored in the **[patches/](./patches/)** folder.
 
 To install this kernel, copy the **zImage** and the **rk3288-miqi.dtb** file in your boot partition.
 Note that if you have access to U-boot through a serial console AND your MiQi is powered through your USB computer, you can access the whole eMMC like a USB memory stick using the following command :
