@@ -48,7 +48,7 @@ unset PATCHES
 
 # Apply a patch to the Mali Midgard driver that adapt the
 # get_user_pages calls to the new signature.
-export MALI_PATCHES_FOLDER=$PATCHES_FOLDER_URL/mali/$MALI_VERSION
+export MALI_PATCHES_FOLDER=$PATCHES_FOLDER_URL/Mali/$MALI_VERSION
 wget $MALI_PATCHES_FOLDER/0001-Adapt-get_user_pages-calls-to-use-the-new-calling-pr.patch &&
 git apply 0001-Adapt-get_user_pages-calls-to-use-the-new-calling-pr.patch &&
 rm 0001-Adapt-get_user_pages-calls-to-use-the-new-calling-pr.patch

@@ -1,7 +1,7 @@
 # Get the kernel
 export KERNEL_VERSION=v4.9
-git clone --depth 1 --branch $KERNEL_VERSION 'git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git' &&
-cd linux
+#git clone --depth 1 --branch $KERNEL_VERSION 'git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git' &&
+#cd linux
 
 # Download, prepare and copy the Mali Kernel-Space drivers. 
 # Some TGZ are AWFULLY packaged with everything having 0777 rights.
@@ -35,7 +35,7 @@ unset PATCHES
 
 # Apply a patch to the Mali Midgard driver that adapt the
 # get_user_pages calls to the new signature.
-export MALI_PATCHES_FOLDER=$PATCHES_FOLDER_URL/mali/$MALI_VERSION
+export MALI_PATCHES_FOLDER=$PATCHES_FOLDER_URL/Mali/$MALI_VERSION
 wget $MALI_PATCHES_FOLDER/0001-Adapt-get_user_pages-calls-to-use-the-new-calling-pr.patch &&
 git apply 0001-Adapt-get_user_pages-calls-to-use-the-new-calling-pr.patch &&
 rm 0001-Adapt-get_user_pages-calls-to-use-the-new-calling-pr.patch
@@ -45,7 +45,7 @@ export ARCH=arm
 #export CROSS_COMPILE=armv7a-hardfloat-linux-gnueabi-
 make mrproper
 wget -O .config 'https://raw.githubusercontent.com/Miouyouyou/MyyQi/master/boot/config-4.9.0MyyMyy%2B'
-make rk3288-miqi.dtb zImage modules -j5
+# make rk3288-miqi.dtb zImage modules -j5
 
 # Kernel compiled
 # This will just copy the kernel files and libraries in /tmp
