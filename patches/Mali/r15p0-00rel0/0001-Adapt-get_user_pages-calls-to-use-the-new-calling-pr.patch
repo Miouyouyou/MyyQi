@@ -1,0 +1,116 @@
+From e287627c06f2541a0e534d5a51a7596d9848768a Mon Sep 17 00:00:00 2001
+From: Myy <myy@miouyouyou.fr>
+Date: Thu, 15 Dec 2016 07:51:28 +0000
+Subject: [PATCH] Adapt get_user_pages calls to use the new calling procedure
+
+get_user_pages and get_user_pages_remote have a new signature.
+
+See kernel commit 9beae1ea89305a9667ceaab6d0bf46a045ad71e7 :
+- https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/diff/?id=9beae1ea89305a9667ceaab6d0bf46a045ad71e7
+
+Basically, before get_user_pages was called like this, for example :
+
+ 	pinned_pages = get_user_pages_remote(NULL, mm,
+ 			address,
+ 			alloc->imported.user_buf.nr_pages,
+			reg->flags & KBASE_REG_GPU_WR,
+			0, pages, NULL);
+
+Now, it should be called like this :
+
+	unsigned int user_pages_flags = 0;
+	if (reg->flags & KBASE_REG_GPU_WR)
+		user_pages_flags |= FOLL_WRITE;
+
+        pinned_pages = get_user_pages_remote(NULL, mm,
+                        address,
+                        alloc->imported.user_buf.nr_pages,
+                        user_pages_flags, pages, NULL);
+
+The reason
+----------
+
+The 'reg->flags & KBASE_REG_GPU_WR' was used as the 'write' argument,
+and the next '0' was used as a 'force' argument.
+
+Now, both values must be passed as flags like this :
+
+unsigned int user_pages_flags = 0;
+if (allow_write_test) user_pages_flags |= FOLL_WRITE;
+if (allow_force)      user_pages_flags |= FOLL_FORCE;
+
+get_user_pages_remote(?,?,?,?,user_pages_flags, ?, ?)
+
+Signed-off-by: Myy <myy@miouyouyou.fr>
+---
+ drivers/gpu/arm/midgard/mali_kbase_mem.c       | 12 +++++++++++-
+ drivers/gpu/arm/midgard/mali_kbase_mem_linux.c |  9 ++++++++-
+ 2 files changed, 19 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/gpu/arm/midgard/mali_kbase_mem.c b/drivers/gpu/arm/midgard/mali_kbase_mem.c
+index d76d16a..4bd0225 100644
+--- a/drivers/gpu/arm/midgard/mali_kbase_mem.c
++++ b/drivers/gpu/arm/midgard/mali_kbase_mem.c
+@@ -2038,6 +2038,7 @@ static int kbase_jd_user_buf_map(struct kbase_context *kctx,
+ 	struct device *dev;
+ 	unsigned long offset;
+ 	unsigned long local_size;
++	unsigned int user_pages_flags = 0;
+ 
+ 	alloc = reg->gpu_alloc;
+ 	pa = kbase_get_gpu_phy_pages(reg);
+@@ -2054,12 +2055,21 @@ static int kbase_jd_user_buf_map(struct kbase_context *kctx,
+ 			alloc->imported.user_buf.nr_pages,
+ 			reg->flags & KBASE_REG_GPU_WR,
+ 			0, pages, NULL);
+-#else
++#elif LINUX_VERSION_CODE < KERNEL_VERSION(4, 8, 0)
+ 	pinned_pages = get_user_pages_remote(NULL, mm,
+ 			address,
+ 			alloc->imported.user_buf.nr_pages,
+ 			reg->flags & KBASE_REG_GPU_WR,
+ 			0, pages, NULL);
++#else
++	if (reg->flags & KBASE_REG_GPU_WR)
++		user_pages_flags |= FOLL_WRITE;
++
++	pinned_pages = get_user_pages_remote(NULL, mm,
++			address,
++			alloc->imported.user_buf.nr_pages,
++			user_pages_flags,
++			pages, NULL);
+ #endif
+ 
+ 	if (pinned_pages <= 0)
+diff --git a/drivers/gpu/arm/midgard/mali_kbase_mem_linux.c b/drivers/gpu/arm/midgard/mali_kbase_mem_linux.c
+index e3787c7..f215eb3 100644
+--- a/drivers/gpu/arm/midgard/mali_kbase_mem_linux.c
++++ b/drivers/gpu/arm/midgard/mali_kbase_mem_linux.c
+@@ -1047,6 +1047,7 @@ static struct kbase_va_region *kbase_mem_from_user_buffer(
+ 	long faulted_pages;
+ 	int zone = KBASE_REG_ZONE_CUSTOM_VA;
+ 	bool shared_zone = false;
++	unsigned int user_pages_flags = 0;
+ 
+ 	*va_pages = (PAGE_ALIGN(address + size) >> PAGE_SHIFT) -
+ 		PFN_DOWN(address);
+@@ -1118,9 +1119,15 @@ static struct kbase_va_region *kbase_mem_from_user_buffer(
+ #if LINUX_VERSION_CODE < KERNEL_VERSION(4, 6, 0)
+ 	faulted_pages = get_user_pages(current, current->mm, address, *va_pages,
+ 			reg->flags & KBASE_REG_GPU_WR, 0, NULL, NULL);
+-#else
++#elif LINUX_VERSION_CODE < KERNEL_VERSION(4, 8, 0)
+ 	faulted_pages = get_user_pages(address, *va_pages,
+ 			reg->flags & KBASE_REG_GPU_WR, 0, NULL, NULL);
++#else
++	if (reg->flags & KBASE_REG_GPU_WR)
++		user_pages_flags |= FOLL_WRITE;
++
++	faulted_pages = get_user_pages(address, *va_pages,
++			user_pages_flags, NULL, NULL);
+ #endif
+ 	up_read(&current->mm->mmap_sem);
+ 
+-- 
+2.4.10
+
