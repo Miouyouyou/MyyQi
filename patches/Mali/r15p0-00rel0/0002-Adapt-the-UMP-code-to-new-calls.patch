@@ -1,0 +1,48 @@
+From c0cf4b3a29e92f89c58b30c7b5323d69462ae5d3 Mon Sep 17 00:00:00 2001
+From: Miouyouyou <Myy@On.MiQi>
+Date: Sun, 18 Dec 2016 10:09:22 +0100
+Subject: [PATCH] Adapt Mali Unified Memory Provider vm_insert_mixed call
+
+vm_insert_mixed signature has changed in Kernel 4.5-rc1.
+
+See commit 01c8f1c44b83a0825b573e7c723b033cece37b86 for more details.
+
+Basically, the pfn structure is a simple "unsigned long" flag.
+
+A new conversion inline function named "__pfn_to_pfn_t" convert old
+the old data structure to the right pfn flag.
+
+---
+ drivers/base/ump/src/linux/ump_kernel_linux_mem.c | 8 ++++++++
+ 1 files changed, 8 insertions(+)
+
+diff --git a/drivers/base/ump/src/linux/ump_kernel_linux_mem.c b/drivers/base/ump/src/linux/ump_kernel_linux_mem.c
+index 9186dd0..def4c0e 100644
+--- a/drivers/base/ump/src/linux/ump_kernel_linux_mem.c
++++ b/drivers/base/ump/src/linux/ump_kernel_linux_mem.c
+@@ -35,6 +35,10 @@
+ #include <ump_arch.h>
+ #include <common/ump_kernel_priv.h>
+ 
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(4,5,0))
++#include <linux/pfn_t.h>
++#endif
++
+ static void umpp_vm_close(struct vm_area_struct *vma)
+ {
+ 	umpp_cpu_mapping * mapping;
+@@ -222,7 +226,11 @@ int umpp_linux_mmap(struct file * filp, struct vm_area_struct * vma)
+ 				paddr = alloc->block_array[block_idx].addr;
+ 			}
+ 
++#if (LINUX_VERSION_CODE <= KERNEL_VERSION(4,4,0))
+ 			err = vm_insert_mixed(vma, vma->vm_start + (i << PAGE_SHIFT), paddr >> PAGE_SHIFT);
++#else
++			err = vm_insert_mixed(vma, vma->vm_start + (i << PAGE_SHIFT), __pfn_to_pfn_t(paddr >> PAGE_SHIFT, PFN_DEV));
++#endif
+ 			paddr += PAGE_SIZE;
+ 		}
+ 
+-- 
+2.7.3
+

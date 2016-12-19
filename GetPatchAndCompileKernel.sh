@@ -1,7 +1,7 @@
 # Get the kernel
 export KERNEL_VERSION=v4.9
-#git clone --depth 1 --branch $KERNEL_VERSION 'git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git' &&
-#cd linux
+git clone --depth 1 --branch $KERNEL_VERSION 'git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git' &&
+cd linux
 
 # Download, prepare and copy the Mali Kernel-Space drivers. 
 # Some TGZ are AWFULLY packaged with everything having 0777 rights.
@@ -22,30 +22,45 @@ rm -r TX011-SW-99002-$MALI_VERSION TX011-SW-99002-$MALI_VERSION.tgz
 # Kconfig/Makefile patches used to enable the compilation of the
 # Mali driver
 export GITHUB_REPO=Miouyouyou/MyyQi
-export GIT_BRANCH=master
+export GIT_BRANCH=rockchipKernelPorts
 export PATCHES_FOLDER_URL=https://raw.githubusercontent.com/$GITHUB_REPO/$GIT_BRANCH/patches
 export KERNEL_PATCHES_FOLDER_URL=$PATCHES_FOLDER_URL/kernel/$KERNEL_VERSION
-wget $KERNEL_PATCHES_FOLDER_URL/0001-Rockchip-DRM-and-Framebuffer-patches-from-ARM-softwa.patch &&
-wget $KERNEL_PATCHES_FOLDER_URL/0002-Integrate-the-Mali-GPU-address-to-the-rk3288-and-rk3.patch &&
-wget $KERNEL_PATCHES_FOLDER_URL/0003-Post-Mali-Kernel-device-drivers-modifications.patch
-export PATCHES="0001-Rockchip-DRM-and-Framebuffer-patches-from-ARM-softwa.patch 0002-Integrate-the-Mali-GPU-address-to-the-rk3288-and-rk3.patch 0003-Post-Mali-Kernel-device-drivers-modifications.patch"
-git apply $PATCHES &&
+
+# TODO : The following patterns should be rewritten as a function...
+export PATCHES="
+0002-Integrate-the-Mali-GPU-address-to-the-rk3288-and-rk3.patch
+0003-Post-Mali-Kernel-device-drivers-modifications.patch
+0004-Add-the-Mali-Unified-Memory-Provider-to-the-kernel.patch
+0005-This-patch-replaces-the-current-Rockchip-DRM-code-wi.patch
+0006-arm-dts-Added-some-RGA-informations-to-the-DTS-files.patch
+"
+for patch in $PATCHES; do
+  wget $KERNEL_PATCHES_FOLDER_URL/$patch || { echo "Could not download $patch"; exit 1; }
+done
+git apply $PATCHES
 rm $PATCHES
 unset PATCHES
 
 # Apply a patch to the Mali Midgard driver that adapt the
 # get_user_pages calls to the new signature.
+export PATCHES="
+0001-Adapt-get_user_pages-calls-to-use-the-new-calling-pr.patch
+0002-Adapt-the-UMP-code-to-new-calls.patch
+"
 export MALI_PATCHES_FOLDER=$PATCHES_FOLDER_URL/Mali/$MALI_VERSION
-wget $MALI_PATCHES_FOLDER/0001-Adapt-get_user_pages-calls-to-use-the-new-calling-pr.patch &&
-git apply 0001-Adapt-get_user_pages-calls-to-use-the-new-calling-pr.patch &&
-rm 0001-Adapt-get_user_pages-calls-to-use-the-new-calling-pr.patch
+for patch in $PATCHES; do
+  wget $MALI_PATCHES_FOLDER/$patch || { echo "Could not download $patch"; exit 1; }
+done
+git apply $PATCHES
+rm $PATCHES
+unset PATCHES
 
 # Get the configuration file and compile the kernel
 export ARCH=arm
-#export CROSS_COMPILE=armv7a-hardfloat-linux-gnueabi-
+export CROSS_COMPILE=armv7a-hardfloat-linux-gnueabi-
 make mrproper
-wget -O .config 'https://raw.githubusercontent.com/Miouyouyou/MyyQi/master/boot/config-4.9.0MyyMyy%2B'
-# make rk3288-miqi.dtb zImage modules -j5
+wget -O .config "https://raw.githubusercontent.com/$GITHUB_REPO/$GIT_BRANCH/boot/config-4.9.0RockMyyMyy%2B"
+make rk3288-miqi.dtb zImage modules -j5
 
 # Kernel compiled
 # This will just copy the kernel files and libraries in /tmp

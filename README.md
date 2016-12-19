@@ -1,7 +1,9 @@
 About
 -----
 
-This is a working patched 4.9 kernel with [Mali r15p0 Kernel drivers](http://malideveloper.arm.com/resources/drivers/open-source-mali-midgard-gpu-kernel-drivers/), using the torvalds branch as a basis.
+This is a working patched 4.9 kernel, using the [torvalds branch as a basis](https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/), with [Mali r15p0 Kernel drivers](http://malideveloper.arm.com/resources/drivers/open-source-mali-midgard-gpu-kernel-drivers/) and a patched Rockchip DRM driver based on the [rockchip-linux/kernel modifications](https://github.com/rockchip-linux/kernel).
+
+**This branch is not recommended for daily use yet. When it will be the case, it will become the master branch of this repository.**
 
 Currently this kernel has been tested sucessfully with the [Firefly's Mali User-space r12p0 drivers for fbdev and wayland](http://malideveloper.arm.com/resources/drivers/arm-mali-midgard-gpu-user-space-drivers/#mali-user-space-driver-r12p0-mali-t760-gnulinux), using the [OpenGL ES 3.1 samples of the Mali OpenGL ES SDK](http://malideveloper.arm.com/resources/sdks/opengl-es-sdk-for-linux/).
 
@@ -35,29 +37,44 @@ rm -r TX011-SW-99002-$MALI_VERSION TX011-SW-99002-$MALI_VERSION.tgz
 # Kconfig/Makefile patches used to enable the compilation of the
 # Mali driver
 export GITHUB_REPO=Miouyouyou/MyyQi
-export GIT_BRANCH=master
+export GIT_BRANCH=rockchipKernelPorts
 export PATCHES_FOLDER_URL=https://raw.githubusercontent.com/$GITHUB_REPO/$GIT_BRANCH/patches
 export KERNEL_PATCHES_FOLDER_URL=$PATCHES_FOLDER_URL/kernel/$KERNEL_VERSION
-wget $KERNEL_PATCHES_FOLDER_URL/0001-Rockchip-DRM-and-Framebuffer-patches-from-ARM-softwa.patch &&
-wget $KERNEL_PATCHES_FOLDER_URL/0002-Integrate-the-Mali-GPU-address-to-the-rk3288-and-rk3.patch &&
-wget $KERNEL_PATCHES_FOLDER_URL/0003-Post-Mali-Kernel-device-drivers-modifications.patch
-export PATCHES="0001-Rockchip-DRM-and-Framebuffer-patches-from-ARM-softwa.patch 0002-Integrate-the-Mali-GPU-address-to-the-rk3288-and-rk3.patch 0003-Post-Mali-Kernel-device-drivers-modifications.patch"
-git apply $PATCHES &&
+
+# TODO : The following patterns should be rewritten as a function...
+export PATCHES="
+0002-Integrate-the-Mali-GPU-address-to-the-rk3288-and-rk3.patch
+0003-Post-Mali-Kernel-device-drivers-modifications.patch
+0004-Add-the-Mali-Unified-Memory-Provider-to-the-kernel.patch
+0005-This-patch-replaces-the-current-Rockchip-DRM-code-wi.patch
+0006-arm-dts-Added-some-RGA-informations-to-the-DTS-files.patch
+"
+for patch in $PATCHES; do
+  wget $KERNEL_PATCHES_FOLDER_URL/$patch || { echo "Could not download $patch"; exit 1; }
+done
+git apply $PATCHES
 rm $PATCHES
 unset PATCHES
 
 # Apply a patch to the Mali Midgard driver that adapt the
 # get_user_pages calls to the new signature.
+export PATCHES="
+0001-Adapt-get_user_pages-calls-to-use-the-new-calling-pr.patch
+0002-Adapt-the-UMP-code-to-new-calls.patch
+"
 export MALI_PATCHES_FOLDER=$PATCHES_FOLDER_URL/Mali/$MALI_VERSION
-wget $MALI_PATCHES_FOLDER/0001-Adapt-get_user_pages-calls-to-use-the-new-calling-pr.patch &&
-git apply 0001-Adapt-get_user_pages-calls-to-use-the-new-calling-pr.patch &&
-rm 0001-Adapt-get_user_pages-calls-to-use-the-new-calling-pr.patch
+for patch in $PATCHES; do
+  wget $MALI_PATCHES_FOLDER/$patch || { echo "Could not download $patch"; exit 1; }
+done
+git apply $PATCHES
+rm $PATCHES
+unset PATCHES
 
 # Get the configuration file and compile the kernel
 export ARCH=arm
-#export CROSS_COMPILE=armv7a-hardfloat-linux-gnueabi-
+export CROSS_COMPILE=armv7a-hardfloat-linux-gnueabi-
 make mrproper
-wget -O .config 'https://raw.githubusercontent.com/Miouyouyou/MyyQi/master/boot/config-4.9.0MyyMyy%2B'
+wget -O .config "https://raw.githubusercontent.com/$GITHUB_REPO/$GIT_BRANCH/boot/config-4.9.0RockMyyMyy%2B"
 make rk3288-miqi.dtb zImage modules -j5
 ```
 

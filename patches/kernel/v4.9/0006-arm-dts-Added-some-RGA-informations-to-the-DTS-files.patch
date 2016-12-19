@@ -1,0 +1,127 @@
+From 2811441608e7bac5e9fe928cf70144bfab84e1b9 Mon Sep 17 00:00:00 2001
+From: Miouyouyou <Myy@On.MiQi>
+Date: Mon, 19 Dec 2016 17:42:10 +0100
+Subject: [PATCH] arm/dts: Added some RGA informations to the DTS files
+
+Added some RGA informations to the RK3288 and RK3288-Miqi DTS files in
+order to try these features on a MiQi device ( RK3288 board ).
+
+As it stands right now, RGA cannot be used on such devices with only
+this patch...
+
+Signed-off-by: Miouyouyou <Myy@On.MiQi>
+---
+ arch/arm/boot/dts/rk3288-miqi.dts | 49 +++++++++++++++++++++++++++++++++++++++
+ arch/arm/boot/dts/rk3288.dtsi     | 11 +++++++++
+ 2 files changed, 60 insertions(+)
+
+diff --git a/arch/arm/boot/dts/rk3288-miqi.dts b/arch/arm/boot/dts/rk3288-miqi.dts
+index 8ba27b2..7b96aca 100644
+--- a/arch/arm/boot/dts/rk3288-miqi.dts
++++ b/arch/arm/boot/dts/rk3288-miqi.dts
+@@ -64,8 +64,50 @@
+ 		clock-output-names = "ext_gmac";
+ 	};
+ 
++        sound {
++                compatible = "simple-audio-card";
++                simple-audio-card,format = "i2s";
++                simple-audio-card,name = "DW-HDMI";
++                simple-audio-card,mclk-fs = <512>;
++
++                simple-audio-card,dai-link@0 {  /* I2S - S/PDIF */
++                        format = "i2s";
++                        cpu {
++                                sound-dai = <&i2s>;
++                        };
++                        codec {
++                                sound-dai = <&hdmi>;
++                        };
++                };
++
++                /*
++                 * If you want to support more cards,
++                 * you can add more dai-link node,
++                 * such as
++                 *
++                 *   simple-audio-card,dai-link@1 {
++                 *       ......
++                 *   }
++                 */
++
++        };
++
++        fan {
++		label = "Fan";
++		compatible = "gpio-fan";
++		gpios = <&gpio0 18 GPIO_ACTIVE_HIGH>;
++                gpio-fan,speed-map = <0    0
++				      1500 1
++                                      3000 2
++                                      6000 3>;
++                alarm-gpios = <&gpio7 4 GPIO_ACTIVE_LOW>;
++                cooling-min-level = <0>;
++                cooling-max-level = <3>;
++	};
++
+ 	leds {
+ 		compatible = "gpio-leds";
++		status = "okay";
+ 
+ 		work {
+ 			gpios = <&gpio7 4 GPIO_ACTIVE_LOW>;
+@@ -74,8 +116,10 @@
+ 			pinctrl-names = "default";
+ 			pinctrl-0 = <&led_ctl>;
+ 		};
++
+ 	};
+ 
++
+ 	vcc_flash: flash-regulator {
+ 		compatible = "regulator-fixed";
+ 		regulator-name = "vcc_flash";
+@@ -129,6 +173,7 @@
+ 	disable-wp;
+ 	non-removable;
+ 	num-slots = <1>;
++	clock-frequency = <75000000>;
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&emmc_clk>, <&emmc_cmd>, <&emmc_pwr>, <&emmc_bus8>;
+ 	vmmc-supply = <&vcc_io>;
+@@ -451,6 +496,10 @@
+ 	status = "okay";
+ };
+ 
++&rga {
++	status = "okay";
++};
++
+ &vopb {
+ 	status = "okay";
+ };
+diff --git a/arch/arm/boot/dts/rk3288.dtsi b/arch/arm/boot/dts/rk3288.dtsi
+index c2fe5fc..87a4afb 100644
+--- a/arch/arm/boot/dts/rk3288.dtsi
++++ b/arch/arm/boot/dts/rk3288.dtsi
+@@ -956,6 +956,17 @@
+ 		status = "okay";
+ 	};
+ 
++	rga: rga@ff920000 {
++		compatible = "rockchip,rk3288-rga";
++		reg = <0xff920000 0x180>;
++		interrupts = <GIC_SPI 18 IRQ_TYPE_LEVEL_HIGH>;
++		clocks = <&cru ACLK_RGA>, <&cru HCLK_RGA>, <&cru SCLK_RGA>;
++		clock-names = "hclk", "aclk", "sclk";
++		resets =  <&cru SRST_RGA_CORE>, <&cru SRST_RGA_AXI>, <&cru SRST_RGA_AHB>;
++		reset-names = "hclk", "aclk", "sclk";
++		status = "disabled";
++	};
++
+ 	vopb: vop@ff930000 {
+ 		compatible = "rockchip,rk3288-vop";
+ 		reg = <0xff930000 0x19c>;
+-- 
+2.7.3
+

@@ -1,0 +1,15 @@
+# Aliases for symbols, used by symbol_request().
+alias symbol:eeprom_93cx6_wren eeprom_93cx6
+alias symbol:eeprom_93cx6_multiread eeprom_93cx6
+alias symbol:private_AES_set_encrypt_key aes_arm
+alias symbol:eeprom_93cx6_readb eeprom_93cx6
+alias symbol:eeprom_93cx6_write eeprom_93cx6
+alias symbol:AES_decrypt aes_arm
+alias symbol:crypto_sha256_arm_finup sha256_arm
+alias symbol:crypto_sha256_arm_update sha256_arm
+alias symbol:private_AES_set_decrypt_key aes_arm
+alias symbol:AES_encrypt aes_arm
+alias symbol:sha1_finup_arm sha1_arm
+alias symbol:eeprom_93cx6_read eeprom_93cx6
+alias symbol:eeprom_93cx6_multireadb eeprom_93cx6
+alias symbol:sha1_update_arm sha1_arm
