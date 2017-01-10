@@ -1,0 +1,142 @@
+From fea4d25a6e16e922dd34e5b348c81f3b5384b9cd Mon Sep 17 00:00:00 2001
+From: Myy <myy@miouyouyou.fr>
+Date: Tue, 10 Jan 2017 04:14:53 +0000
+Subject: [PATCH 1/2] Adaptation to Linux 4.10.0-rcX signatures
+
+These changes are due to these commits:
+
+* mm: add locked parameter to get_user_pages_remote()
+5b56d49fc31dbb0487e14ead790fc81ca9fb2c99
+Kernel: 4.10.0-rc
+
+* ktime: Get rid of the union
+2456e855354415bfaeb7badaa14e11b3e02c8466
+Kernel: 4.10.0-rc
+
+* mm: use vmf->address instead of of vmf->virtual_address
+1a29d85eb0f19b7d8271923d8917d7b4f5540b3e
+Kernel: 4.10.0-rc
+
+mm: replace get_user_pages_remote() write/force parameters with gup_flags
+9beae1ea89305a9667ceaab6d0bf46a045ad71e7
+Kernel: 4.9.0-rc
+
+Signed-off-by: Myy <myy@miouyouyou.fr>
+---
+ drivers/gpu/arm/midgard/mali_kbase_jd.c        |  7 +++++++
+ drivers/gpu/arm/midgard/mali_kbase_mem.c       | 21 ++++++++++++++++++++-
+ drivers/gpu/arm/midgard/mali_kbase_mem_linux.c | 19 +++++++++++++++++--
+ 3 files changed, 44 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/gpu/arm/midgard/mali_kbase_jd.c b/drivers/gpu/arm/midgard/mali_kbase_jd.c
+index 3518609..ba90b45 100644
+--- a/drivers/gpu/arm/midgard/mali_kbase_jd.c
++++ b/drivers/gpu/arm/midgard/mali_kbase_jd.c
+@@ -975,7 +975,14 @@ bool jd_submit_atom(struct kbase_context *kctx, const struct base_jd_atom_v2 *us
+ 	 * the scheduler: 'not ready to run' and 'dependency-only' jobs. */
+ 	jctx->job_nr++;
+ 
++#if LINUX_VERSION_CODE < KERNEL_VERSION(4, 10, 0)
+ 	katom->start_timestamp.tv64 = 0;
++#else
++	/* ktime_t is not an union anymore in the 4.10.0
++	   Commit: 2456e855354415bfaeb7badaa14e11b3e02c8466
++	*/
++	katom->start_timestamp = 0;
++#endif
+ 	katom->time_spent_us = 0;
+ 	katom->udata = user_atom->udata;
+ 	katom->kctx = kctx;
+diff --git a/drivers/gpu/arm/midgard/mali_kbase_mem.c b/drivers/gpu/arm/midgard/mali_kbase_mem.c
+index d76d16a..7185ce6 100644
+--- a/drivers/gpu/arm/midgard/mali_kbase_mem.c
++++ b/drivers/gpu/arm/midgard/mali_kbase_mem.c
+@@ -2038,6 +2038,7 @@ static int kbase_jd_user_buf_map(struct kbase_context *kctx,
+ 	struct device *dev;
+ 	unsigned long offset;
+ 	unsigned long local_size;
++	unsigned int user_pages_flags = 0;
+ 
+ 	alloc = reg->gpu_alloc;
+ 	pa = kbase_get_gpu_phy_pages(reg);
+@@ -2054,12 +2055,30 @@ static int kbase_jd_user_buf_map(struct kbase_context *kctx,
+ 			alloc->imported.user_buf.nr_pages,
+ 			reg->flags & KBASE_REG_GPU_WR,
+ 			0, pages, NULL);
+-#else
++#elif LINUX_VERSION_CODE < KERNEL_VERSION(4, 8, 0)
+ 	pinned_pages = get_user_pages_remote(NULL, mm,
+ 			address,
+ 			alloc->imported.user_buf.nr_pages,
+ 			reg->flags & KBASE_REG_GPU_WR,
+ 			0, pages, NULL);
++#elif LINUX_VERSION_CODE < KERNEL_VERSION(4, 10, 0)
++	if (reg->flags & KBASE_REG_GPU_WR)
++		user_pages_flags |= FOLL_WRITE;
++
++	pinned_pages = get_user_pages_remote(NULL, mm,
++			address,
++			alloc->imported.user_buf.nr_pages,
++			user_pages_flags,
++			pages, NULL);
++#else /* Okay, another approach is clearly needed ! */
++	if (reg->flags & KBASE_REG_GPU_WR)
++		user_pages_flags |= FOLL_WRITE;
++
++	pinned_pages = get_user_pages_remote(NULL, mm,
++			address,
++			alloc->imported.user_buf.nr_pages,
++			user_pages_flags,
++			pages, NULL, NULL);
+ #endif
+ 
+ 	if (pinned_pages <= 0)
+diff --git a/drivers/gpu/arm/midgard/mali_kbase_mem_linux.c b/drivers/gpu/arm/midgard/mali_kbase_mem_linux.c
+index e3787c7..84fe1d5 100644
+--- a/drivers/gpu/arm/midgard/mali_kbase_mem_linux.c
++++ b/drivers/gpu/arm/midgard/mali_kbase_mem_linux.c
+@@ -1047,6 +1047,7 @@ static struct kbase_va_region *kbase_mem_from_user_buffer(
+ 	long faulted_pages;
+ 	int zone = KBASE_REG_ZONE_CUSTOM_VA;
+ 	bool shared_zone = false;
++	unsigned int user_pages_flags = 0;
+ 
+ 	*va_pages = (PAGE_ALIGN(address + size) >> PAGE_SHIFT) -
+ 		PFN_DOWN(address);
+@@ -1118,9 +1119,15 @@ static struct kbase_va_region *kbase_mem_from_user_buffer(
+ #if LINUX_VERSION_CODE < KERNEL_VERSION(4, 6, 0)
+ 	faulted_pages = get_user_pages(current, current->mm, address, *va_pages,
+ 			reg->flags & KBASE_REG_GPU_WR, 0, NULL, NULL);
+-#else
++#elif LINUX_VERSION_CODE < KERNEL_VERSION(4, 8, 0)
+ 	faulted_pages = get_user_pages(address, *va_pages,
+ 			reg->flags & KBASE_REG_GPU_WR, 0, NULL, NULL);
++#else
++	if (reg->flags & KBASE_REG_GPU_WR)
++		user_pages_flags |= FOLL_WRITE;
++
++	faulted_pages = get_user_pages(address, *va_pages,
++			user_pages_flags, NULL, NULL);
+ #endif
+ 	up_read(&current->mm->mmap_sem);
+ 
+@@ -1758,7 +1765,15 @@ static int kbase_cpu_vm_fault(struct vm_area_struct *vma, struct vm_fault *vmf)
+ 
+ 	/* insert all valid pages from the fault location */
+ 	i = rel_pgoff;
+-	addr = (pgoff_t)((uintptr_t)vmf->virtual_address >> PAGE_SHIFT);
++/* Technically, this check is useless.
++   virtual_address has been dropped because it served no purpose.
++   Commit: 1a29d85eb0f19b7d8271923d8917d7b4f5540b3e */
++#if LINUX_VERSION_CODE < KERNEL_VERSION(4, 10, 0)
++ 	addr = (pgoff_t)((uintptr_t)vmf->virtual_address >> PAGE_SHIFT);
++#else
++	addr = vmf->address >> PAGE_SHIFT;
++#endif
++
+ 	while (i < map->alloc->nents && (addr < vma->vm_end >> PAGE_SHIFT)) {
+ 		int ret = vm_insert_pfn(vma, addr << PAGE_SHIFT,
+ 		    PFN_DOWN(map->alloc->pages[i]));
+-- 
+2.10.2
+
