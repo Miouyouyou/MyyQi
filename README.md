@@ -1,3 +1,9 @@
+Tipping
+-------
+
+[![Pledgie !](https://pledgie.com/campaigns/32702.png)](https://pledgie.com/campaigns/32702)
+[![Tip with Altcoins](https://shapeshift.io/images/shifty/small_light_altcoins.png)](https://shapeshift.io/shifty.html?destination=16zwQUkG29D49G6C7pzch18HjfJqMXFNrW&output=BTC)
+
 About
 -----
 
@@ -114,12 +120,5 @@ TODO
 - [ ] Add [gator](https://github.com/ARM-software/gator)
 - [ ] Document how to use [DS-5 : Streamline](https://developer.arm.com/products/software-development-tools/ds-5-development-studio/streamline/overview) to analyse OpenGL ES 2.x/3.x programs running on MiQi boards using such kernels.
 
-Tipping
--------
 
-[Pledgie !](https://pledgie.com/campaigns/32702)
-
-BTC: 16zwQUkG29D49G6C7pzch18HjfJqMXFNrW
-
-[![Tip with Altcoins](https://shapeshift.io/images/shifty/small_light_altcoins.png)](https://shapeshift.io/shifty.html?destination=16zwQUkG29D49G6C7pzch18HjfJqMXFNrW&output=BTC)
 
