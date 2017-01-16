@@ -9,7 +9,9 @@ function download_and_apply_patches {
 	rm $patches
 }
 
-export KERNEL_VERSION=v4.9
+export KERNEL_BRANCH=v4.9
+export KERNEL_VERSION=4.9.0
+export MYY_NAME=MyyMyy+
 export MALI_VERSION=r15p0-00rel0
 
 export GITHUB_REPO=Miouyouyou/MyyQi
@@ -17,7 +19,7 @@ export GIT_BRANCH=v4.9
 
 export BASE_FILES_URL=https://raw.githubusercontent.com
 export PATCHES_FOLDER_URL=$BASE_FILES_URL/$GITHUB_REPO/$GIT_BRANCH/patches
-export KERNEL_PATCHES_FOLDER_URL=$PATCHES_FOLDER_URL/kernel/$KERNEL_VERSION
+export KERNEL_PATCHES_FOLDER_URL=$PATCHES_FOLDER_URL/kernel/$KERNEL_BRANCH
 export MALI_PATCHES_FOLDER=$PATCHES_FOLDER_URL/Mali/$MALI_VERSION
 
 export MALI_PATCHES="
@@ -38,7 +40,7 @@ export KERNEL_PATCHES="
 "
 
 # Get the kernel
-git clone --depth 1 --branch $KERNEL_VERSION 'git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git' &&
+git clone --depth 1 --branch $KERNEL_BRANCH 'git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git' &&
 cd linux
 
 export SRC_DIR=$PWD
@@ -72,7 +74,7 @@ download_and_apply_patches $MALI_PATCHES_FOLDER $MALI_PATCHES
 export ARCH=arm
 export CROSS_COMPILE=armv7a-hardfloat-linux-gnueabi-
 make mrproper
-wget -O .config "$BASE_FILES_URL/$GITHUB_REPO/$GIT_BRANCH/boot/config-4.10.0-rc3RockMyyX-rc+"
+wget -O .config "$BASE_FILES_URL/$GITHUB_REPO/$GIT_BRANCH/boot/config-$KERNEL_VERSION$MYY_NAME"
 make rk3288-miqi.dtb zImage modules -j5
 
 # Kernel compiled
@@ -80,8 +82,10 @@ make rk3288-miqi.dtb zImage modules -j5
 # This part is only useful if you're cross-compiling the kernel, of course
 # mkdir /tmp/MyyQi &&
 # mkdir /tmp/MyyQi/boot &&
+# mkdir /tmp/MyyQi/usr &&
 # make INSTALL_MOD_PATH=/tmp/MyyQi modules_install &&
-# make INSTALL_PATH=/tmp/MyyQi/boot install
+# make INSTALL_PATH=/tmp/MyyQi/boot install &&
+# make INSTALL_HDR_PATH=/tmp/MyyQi/usr headers_install
 # cp arch/arm/boot/zImage /tmp/MyyQi/boot
 # cp arch/arm/boot/dts/rk3288-miqi.dtb /tmp/MyyQi/boot
 
