@@ -1,0 +1,35 @@
+From c0cf4b3a29e92f89c58b30c7b5323d69462ae5d3 Mon Sep 17 00:00:00 2001
+From: Miouyouyou <Myy@On.MiQi>
+Date: Sun, 18 Dec 2016 10:09:22 +0100
+Subject: [PATCH] Add the Mali Unified Memory Provider to the kernel
+
+---
+ drivers/base/Kconfig                              | 2 ++
+ drivers/base/Makefile                             | 1 +
+ 2 files changed, 3 insertions(+)
+
+diff --git a/drivers/base/Kconfig b/drivers/base/Kconfig
+index d02e7c0..3dbfaf1 100644
+--- a/drivers/base/Kconfig
++++ b/drivers/base/Kconfig
+@@ -336,4 +336,6 @@ config CMA_ALIGNMENT
+ 
+ endif
+ 
++source "drivers/base/ump/Kconfig"
++
+ endmenu
+diff --git a/drivers/base/Makefile b/drivers/base/Makefile
+index 2609ba2..bd0ee2a 100644
+--- a/drivers/base/Makefile
++++ b/drivers/base/Makefile
+@@ -23,6 +23,7 @@ obj-$(CONFIG_SOC_BUS) += soc.o
+ obj-$(CONFIG_PINCTRL) += pinctrl.o
+ obj-$(CONFIG_DEV_COREDUMP) += devcoredump.o
+ obj-$(CONFIG_GENERIC_MSI_IRQ_DOMAIN) += platform-msi.o
++obj-$(CONFIG_UMP) += ump/
+ 
+ ccflags-$(CONFIG_DEBUG_DRIVER) := -DDEBUG
+
+-- 
+2.7.3
