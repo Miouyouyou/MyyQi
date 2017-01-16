@@ -10,7 +10,7 @@ function download_and_apply_patches {
 }
 
 export KERNEL_BRANCH=v4.10-rc4
-export KERNEL_VERESION=4.10.0-rc4
+export KERNEL_VERSION=4.10.0-rc4
 export MYY_VERSION=RockMyyX-rc+
 export MALI_VERSION=r15p0-00rel0
 
