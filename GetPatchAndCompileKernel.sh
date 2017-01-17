@@ -34,6 +34,8 @@ export KERNEL_PATCHES="
 0009-ARM-dts-rockchip-add-support-for-1800-MHz-operation-.patch
 0010-clk-rockchip-add-all-known-operating-points-to-the-a.patch
 0011-ARM-dts-rockchip-miqi-add-turbo-mode-operating-point.patch
+0012-arm-dts-Adding-and-enabling-VPU-services-addresses-f.patch
+0013-Export-rockchip_pmu_set_idle_request-for-out-of-tree.patch
 "
 export MALI_PATCHES="
 0001-Midgard-daptation-to-Linux-4.10.0-rcX-signatures.patch
@@ -85,7 +87,7 @@ make rk3288-miqi.dtb zImage modules -j5
 # mkdir /tmp/MyyQi/usr &&
 # make INSTALL_MOD_PATH=/tmp/MyyQi modules_install &&
 # make INSTALL_PATH=/tmp/MyyQi/boot install &&
-# make INSTALL_HDR_PATH=/tmp/MyyQi/usr install &&
+# make INSTALL_HDR_PATH=/tmp/MyyQi/usr headers_install &&
 # cp arch/arm/boot/zImage /tmp/MyyQi/boot &&
 # cp arch/arm/boot/dts/rk3288-miqi.dtb /tmp/MyyQi/boot
 

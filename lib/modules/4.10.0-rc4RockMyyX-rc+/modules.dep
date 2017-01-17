@@ -17,3 +17,4 @@ kernel/drivers/i2c/i2c-stub.ko:
 kernel/drivers/mmc/host/sdhci-cadence.ko:
 kernel/drivers/leds/uleds.ko:
 kernel/sound/soc/codecs/snd-soc-hdmi-codec.ko:
+extra/rk-vcodec.ko:

@@ -191,3 +191,11 @@ alias of:N*T*Ccdns,sd4hc sdhci_cadence
 alias of:N*T*Csocionext,uniphier-sd4hcC* sdhci_cadence
 alias of:N*T*Csocionext,uniphier-sd4hc sdhci_cadence
 alias platform:hdmi-audio-codec snd_soc_hdmi_codec
+alias of:N*T*Crockchip,rkvdecC* rk_vcodec
+alias of:N*T*Crockchip,rkvdec rk_vcodec
+alias of:N*T*Crockchip,vpu_comboC* rk_vcodec
+alias of:N*T*Crockchip,vpu_combo rk_vcodec
+alias of:N*T*Crockchip,hevc_serviceC* rk_vcodec
+alias of:N*T*Crockchip,hevc_service rk_vcodec
+alias of:N*T*Crockchip,vpu_serviceC* rk_vcodec
+alias of:N*T*Crockchip,vpu_service rk_vcodec

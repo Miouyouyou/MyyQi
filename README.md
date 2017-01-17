@@ -51,6 +51,8 @@ export KERNEL_PATCHES="
 0009-ARM-dts-rockchip-add-support-for-1800-MHz-operation-.patch
 0010-clk-rockchip-add-all-known-operating-points-to-the-a.patch
 0011-ARM-dts-rockchip-miqi-add-turbo-mode-operating-point.patch
+0012-arm-dts-Adding-and-enabling-VPU-services-addresses-f.patch
+0013-Export-rockchip_pmu_set_idle_request-for-out-of-tree.patch
 "
 export MALI_PATCHES="
 0001-Midgard-daptation-to-Linux-4.10.0-rcX-signatures.patch
@@ -115,8 +117,9 @@ TODO
 
 - [x] Document how to use the generated kernel and boot it
 - [x] Add the [Open Source Kernel-space Mali Midgard drivers](http://malideveloper.arm.com/resources/drivers/open-source-mali-midgard-gpu-kernel-drivers/)
-- [ ] Add [gator](https://github.com/ARM-software/gator)
-- [ ] Document how to use [DS-5 : Streamline](https://developer.arm.com/products/software-development-tools/ds-5-development-studio/streamline/overview) to analyse OpenGL ES 2.x/3.x programs running on MiQi boards using such kernels.
+- [ ] Add [gator](https://github.com/ARM-software/gator) (Generates lock-ups)
+- [ ] Document how to use [DS-5 : Streamline](https://developer.arm.com/products/software-development-tools/ds-5-development-studio/streamline/overview) to analyse OpenGL ES 2.x/3.x programs running on MiQi boards using such kernels. (Generates lock-ups)
+- [ ] Integrating Rockchip VPU code (In progress)
 
 
 
