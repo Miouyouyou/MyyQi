@@ -36,6 +36,7 @@ export KERNEL_PATCHES="
 0011-ARM-dts-rockchip-miqi-add-turbo-mode-operating-point.patch
 0012-arm-dts-Adding-and-enabling-VPU-services-addresses-f.patch
 0013-Export-rockchip_pmu_set_idle_request-for-out-of-tree.patch
+0014-Adaptation-of-Shawn-Lin-s-patch-muting-the-MMC-drive.patch
 "
 export MALI_PATCHES="
 0001-Midgard-daptation-to-Linux-4.10.0-rcX-signatures.patch
