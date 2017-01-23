@@ -9,8 +9,8 @@ function download_and_apply_patches {
 	rm $patches
 }
 
-export KERNEL_BRANCH=v4.10-rc4
-export KERNEL_VERSION=4.10.0-rc4
+export KERNEL_BRANCH=v4.10-rc5
+export KERNEL_VERSION=4.10.0-rc5
 export MYY_VERSION=RockMyyX-rc+
 export MALI_VERSION=r15p0-00rel0
 
@@ -83,12 +83,13 @@ make rk3288-miqi.dtb zImage modules -j5
 # Kernel compiled
 # This will just copy the kernel files and libraries in /tmp
 # This part is only useful if you're cross-compiling the kernel, of course
-# mkdir /tmp/MyyQi &&
-# mkdir /tmp/MyyQi/boot &&
-# mkdir /tmp/MyyQi/usr &&
-# make INSTALL_MOD_PATH=/tmp/MyyQi modules_install &&
-# make INSTALL_PATH=/tmp/MyyQi/boot install &&
-# make INSTALL_HDR_PATH=/tmp/MyyQi/usr headers_install &&
-# cp arch/arm/boot/zImage /tmp/MyyQi/boot &&
-# cp arch/arm/boot/dts/rk3288-miqi.dtb /tmp/MyyQi/boot
+# export INSTALL_MOD_PATH=/tmp/MyyQi
+# export INSTALL_PATH=/tmp/MyyQi/boot
+# export INSTALL_HDR_PATH=/tmp/MyyQi/usr
+# mkdir -p $INSTALL_MOD_PATH $INSTALL_PATH $INSTALL_HDR_PATH
+# make modules_install &&
+# make install &&
+# make headers_install &&
+# cp arch/arm/boot/zImage $INSTALL_PATH &&
+# cp arch/arm/boot/dts/rk3288-miqi.dtb $INSTALL_PATH
 
