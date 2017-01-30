@@ -9,8 +9,8 @@ function download_and_apply_patches {
 	rm $patches
 }
 
-export KERNEL_BRANCH=v4.10-rc5
-export KERNEL_VERSION=4.10.0-rc5
+export KERNEL_BRANCH=v4.10-rc6
+export KERNEL_VERSION=4.10.0-rc6
 export MYY_VERSION=RockMyyX-rc+
 export MALI_VERSION=r15p0-00rel0
 
@@ -26,7 +26,6 @@ export KERNEL_PATCHES="
 0001-Readaptation-of-Rockchip-DRM-patches-provided-by-ARM.patch
 0002-Integrate-the-Mali-GPU-address-to-the-rk3288-and-rk3.patch
 0003-Post-Mali-Kernel-device-drivers-modifications.patch
-0004-mmc-Applied-Ziyuan-Xu-dw_mmc-patch.patch
 0005-Post-Mali-UMP-integration.patch
 0006-ARM-dts-rockchip-fix-the-regulator-s-voltage-range-o.patch
 0007-ARM-dts-rockchip-fix-the-MiQi-board-s-LED-definition.patch
