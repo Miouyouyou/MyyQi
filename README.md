@@ -7,7 +7,7 @@ Tipping
 About
 -----
 
-This is a working patched 4.10-rc5 kernel with [Mali r15p0 Kernel drivers](http://malideveloper.arm.com/resources/drivers/open-source-mali-midgard-gpu-kernel-drivers/), using the torvalds branch as a basis. This also integrate patches from Willy Tarreau, making possible to get better performances from the board. [More informations in this thread](https://forum.mqmaker.com/t/miqi-based-build-farm-finally-up-and-running/605).
+This is a working patched 4.10-rc6 kernel with [Mali r15p0 Kernel drivers](http://malideveloper.arm.com/resources/drivers/open-source-mali-midgard-gpu-kernel-drivers/), using the torvalds branch as a basis. This also integrate patches from Willy Tarreau, making possible to get better performances from the board. [More informations in this thread](https://forum.mqmaker.com/t/miqi-based-build-farm-finally-up-and-running/605).
 
 Currently this kernel has been tested sucessfully with the [Firefly's Mali User-space r12p0 drivers for fbdev and wayland](http://malideveloper.arm.com/resources/drivers/arm-mali-midgard-gpu-user-space-drivers/#mali-user-space-driver-r12p0-mali-t760-gnulinux), using the [OpenGL ES 3.1 samples of the Mali OpenGL ES SDK](http://malideveloper.arm.com/resources/sdks/opengl-es-sdk-for-linux/). Pure DRM OpenGL was also tested successfully with these drivers, using [this patched gl2mark](https://github.com/Miouyouyou/glmark2).
 
@@ -26,8 +26,8 @@ function download_and_apply_patches {
 	rm $patches
 }
 
-export KERNEL_BRANCH=v4.10-rc4
-export KERNEL_VERSION=4.10.0-rc4
+export KERNEL_BRANCH=v4.10-rc6
+export KERNEL_VERSION=4.10.0-rc6
 export MYY_VERSION=RockMyyX-rc+
 export MALI_VERSION=r15p0-00rel0
 
@@ -43,53 +43,6 @@ export KERNEL_PATCHES="
 0001-Readaptation-of-Rockchip-DRM-patches-provided-by-ARM.patch
 0002-Integrate-the-Mali-GPU-address-to-the-rk3288-and-rk3.patch
 0003-Post-Mali-Kernel-device-drivers-modifications.patch
-0004-mmc-Applied-Ziyuan-Xu-dw_mmc-patch.patch
-0005-Post-Mali-UMP-integration.patch
-0006-ARM-dts-rockchip-fix-the-regulator-s-voltage-range-o.patch
-0007-ARM-dts-rockchip-fix-the-MiQi-board-s-LED-definition.patch
-0008-ARM-dts-rockchip-add-the-MiQi-board-s-fan-definition.patch
-0009-ARM-dts-rockchip-add-support-for-1800-MHz-operation-.patch
-0010-clk-rockchip-add-all-known-operating-points-to-the-a.patch
-0011-ARM-dts-rockchip-miqi-add-turbo-mode-operating-point.patch
-0012-arm-dts-Adding-and-enabling-VPU-services-addresses-f.patch
-0013-Export-rockchip_pmu_set_idle_request-for-out-of-tree.patch
-0014-Adaptation-of-Shawn-Lin-s-patch-muting-the-MMC-drive.patch
-"
-export MALI_PATCHES="
-0001-Midgard-daptation-to-Linux-4.10.0-rcX-signatures.patch
-0002-UMP-Adapt-get_user_pages-calls.patch
-0003-Renamed-Kernel-DMA-Fence-structures-and-functions.patch
-"
-
-function download_and_apply_patches {
-	base_url=$1
-	patches=${@:2}
-	for patch in $patches; do
-		wget $base_url/$patch || 
-		{ echo "Could not download $patch"; exit 1; }
-	done
-	git apply $patches
-	rm $patches
-}
-
-export KERNEL_BRANCH=v4.10-rc5
-export KERNEL_VERSION=4.10.0-rc5
-export MYY_VERSION=RockMyyX-rc+
-export MALI_VERSION=r15p0-00rel0
-
-export GITHUB_REPO=Miouyouyou/MyyQi
-export GIT_BRANCH=master
-
-export BASE_FILES_URL=https://raw.githubusercontent.com
-export PATCHES_FOLDER_URL=$BASE_FILES_URL/$GITHUB_REPO/$GIT_BRANCH/patches
-export KERNEL_PATCHES_FOLDER_URL=$PATCHES_FOLDER_URL/kernel/$KERNEL_BRANCH
-export MALI_PATCHES_FOLDER=$PATCHES_FOLDER_URL/Mali/$MALI_VERSION
-
-export KERNEL_PATCHES="
-0001-Readaptation-of-Rockchip-DRM-patches-provided-by-ARM.patch
-0002-Integrate-the-Mali-GPU-address-to-the-rk3288-and-rk3.patch
-0003-Post-Mali-Kernel-device-drivers-modifications.patch
-0004-mmc-Applied-Ziyuan-Xu-dw_mmc-patch.patch
 0005-Post-Mali-UMP-integration.patch
 0006-ARM-dts-rockchip-fix-the-regulator-s-voltage-range-o.patch
 0007-ARM-dts-rockchip-fix-the-MiQi-board-s-LED-definition.patch
