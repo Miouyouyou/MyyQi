@@ -3,11 +3,12 @@ Tipping
 
 [![Pledgie !](https://pledgie.com/campaigns/32702.png)](https://pledgie.com/campaigns/32702)
 [![Tip with Altcoins](https://raw.githubusercontent.com/Miouyouyou/Shapeshift-Tip-button/9e13666e9d0ecc68982fdfdf3625cd24dd2fb789/Tip-with-altcoin.png)](https://shapeshift.io/shifty.html?destination=16zwQUkG29D49G6C7pzch18HjfJqMXFNrW&output=BTC)
+[![Tip with Bitcoins](https://raw.githubusercontent.com/Miouyouyou/miouyouyou.github.io/master/img/btc-icon.png)](bitcoin:16zwQUkG29D49G6C7pzch18HjfJqMXFNrW)
 
 About
 -----
 
-This is a working patched 4.10-rc6 kernel with [Mali r15p0 Kernel drivers](http://malideveloper.arm.com/resources/drivers/open-source-mali-midgard-gpu-kernel-drivers/), using the torvalds branch as a basis. This also integrate patches from Willy Tarreau, making possible to get better performances from the board. [More informations in this thread](https://forum.mqmaker.com/t/miqi-based-build-farm-finally-up-and-running/605).
+This is a working patched 4.10-rc7 kernel with [Mali r15p0 Kernel drivers](http://malideveloper.arm.com/resources/drivers/open-source-mali-midgard-gpu-kernel-drivers/), using the torvalds branch as a basis. This also integrate patches from Willy Tarreau, making possible to get better performances from the board. [More informations in this thread](https://forum.mqmaker.com/t/miqi-based-build-farm-finally-up-and-running/605).
 
 Currently this kernel has been tested sucessfully with the [Firefly's Mali User-space r12p0 drivers for fbdev and wayland](http://malideveloper.arm.com/resources/drivers/arm-mali-midgard-gpu-user-space-drivers/#mali-user-space-driver-r12p0-mali-t760-gnulinux), using the [OpenGL ES 3.1 samples of the Mali OpenGL ES SDK](http://malideveloper.arm.com/resources/sdks/opengl-es-sdk-for-linux/). Pure DRM OpenGL was also tested successfully with these drivers, using [this patched gl2mark](https://github.com/Miouyouyou/glmark2).
 
@@ -26,8 +27,8 @@ function download_and_apply_patches {
 	rm $patches
 }
 
-export KERNEL_BRANCH=v4.10-rc6
-export KERNEL_VERSION=4.10.0-rc6
+export KERNEL_BRANCH=v4.10-rc7
+export KERNEL_VERSION=4.10.0-rc7
 export MYY_VERSION=RockMyyX-rc+
 export MALI_VERSION=r15p0-00rel0
 

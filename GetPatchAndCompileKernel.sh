@@ -9,8 +9,8 @@ function download_and_apply_patches {
 	rm $patches
 }
 
-export KERNEL_BRANCH=v4.10-rc6
-export KERNEL_VERSION=4.10.0-rc6
+export KERNEL_BRANCH=v4.10-rc7
+export KERNEL_VERSION=4.10.0-rc7
 export MYY_VERSION=RockMyyX-rc+
 export MALI_VERSION=r15p0-00rel0
 
