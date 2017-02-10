@@ -1,10 +1,16 @@
-function download_and_apply_patches {
+function download_patches {
 	base_url=$1
 	patches=${@:2}
 	for patch in $patches; do
-		wget $base_url/$patch || 
+		wget $base_url/$patch ||
 		{ echo "Could not download $patch"; exit 1; }
 	done
+}
+
+function download_and_apply_patches {
+	base_url=$1
+	patches=${@:2}
+	download_patches $base_url $patches
 	git apply $patches
 	rm $patches
 }
@@ -12,7 +18,8 @@ function download_and_apply_patches {
 export KERNEL_BRANCH=v4.10-rc7
 export KERNEL_VERSION=4.10.0-rc7
 export MYY_VERSION=RockMyyX-rc+
-export MALI_VERSION=r15p0-00rel0
+export MALI_VERSION=r16p0-00rel0
+export MALI_BASE_URL=https://developer.arm.com/-/media/Files/downloads/mali-drivers/kernel/mali-midgard-gpu
 
 export GITHUB_REPO=Miouyouyou/MyyQi
 export GIT_BRANCH=master
@@ -53,7 +60,7 @@ export SRC_DIR=$PWD
 # Download, prepare and copy the Mali Kernel-Space drivers. 
 # Some TGZ are AWFULLY packaged with everything having 0777 rights.
 
-wget "http://malideveloper.arm.com/downloads/drivers/TX011/$MALI_VERSION/TX011-SW-99002-$MALI_VERSION.tgz" &&
+wget "$MALI_BASE_URL/TX011-SW-99002-$MALI_VERSION.tgz" &&
 tar zxvf TX011-SW-99002-$MALI_VERSION.tgz &&
 cd TX011-SW-99002-$MALI_VERSION &&
 find . -type 'f' -exec chmod 0644 {} ';' && # Every file   should have -rw-r--r-- rights

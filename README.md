@@ -7,7 +7,7 @@ Tipping
 About
 -----
 
-This is a working patched 4.10-rc7 kernel with [Mali r15p0 Kernel drivers](http://malideveloper.arm.com/resources/drivers/open-source-mali-midgard-gpu-kernel-drivers/), using the torvalds branch as a basis. This also integrate patches from Willy Tarreau, making possible to get better performances from the board. [More informations in this thread](https://forum.mqmaker.com/t/miqi-based-build-farm-finally-up-and-running/605).
+This is a working patched 4.10-rc7 kernel with [Mali r16p00 Kernel drivers](http://malideveloper.arm.com/resources/drivers/open-source-mali-midgard-gpu-kernel-drivers/), using the torvalds branch as a basis. This also integrate patches from Willy Tarreau, making possible to get better performances from the board. [More informations in this thread](https://forum.mqmaker.com/t/miqi-based-build-farm-finally-up-and-running/605).
 
 Currently this kernel has been tested sucessfully with the [Firefly's Mali User-space r12p0 drivers for fbdev and wayland](http://malideveloper.arm.com/resources/drivers/arm-mali-midgard-gpu-user-space-drivers/#mali-user-space-driver-r12p0-mali-t760-gnulinux), using the [OpenGL ES 3.1 samples of the Mali OpenGL ES SDK](http://malideveloper.arm.com/resources/sdks/opengl-es-sdk-for-linux/). Pure DRM OpenGL was also tested successfully with these drivers, using [this patched gl2mark](https://github.com/Miouyouyou/glmark2).
 
@@ -15,13 +15,19 @@ X11 drivers were not tested successfully however.
 
 The kernel was compiled using the following procedure :
 ```bash
-function download_and_apply_patches {
+function download_patches {
 	base_url=$1
 	patches=${@:2}
 	for patch in $patches; do
-		wget $base_url/$patch || 
+		wget $base_url/$patch ||
 		{ echo "Could not download $patch"; exit 1; }
 	done
+}
+
+function download_and_apply_patches {
+	base_url=$1
+	patches=${@:2}
+	download_patches $base_url $patches
 	git apply $patches
 	rm $patches
 }
@@ -29,7 +35,8 @@ function download_and_apply_patches {
 export KERNEL_BRANCH=v4.10-rc7
 export KERNEL_VERSION=4.10.0-rc7
 export MYY_VERSION=RockMyyX-rc+
-export MALI_VERSION=r15p0-00rel0
+export MALI_VERSION=r16p0-00rel0
+export MALI_BASE_URL=https://developer.arm.com/-/media/Files/downloads/mali-drivers/kernel/mali-midgard-gpu
 
 export GITHUB_REPO=Miouyouyou/MyyQi
 export GIT_BRANCH=master
@@ -70,7 +77,7 @@ export SRC_DIR=$PWD
 # Download, prepare and copy the Mali Kernel-Space drivers. 
 # Some TGZ are AWFULLY packaged with everything having 0777 rights.
 
-wget "http://malideveloper.arm.com/downloads/drivers/TX011/$MALI_VERSION/TX011-SW-99002-$MALI_VERSION.tgz" &&
+wget "$MALI_BASE_URL/TX011-SW-99002-$MALI_VERSION.tgz" &&
 tar zxvf TX011-SW-99002-$MALI_VERSION.tgz &&
 cd TX011-SW-99002-$MALI_VERSION &&
 find . -type 'f' -exec chmod 0644 {} ';' && # Every file   should have -rw-r--r-- rights
