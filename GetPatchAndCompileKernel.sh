@@ -15,9 +15,11 @@ function download_and_apply_patches {
 	rm $patches
 }
 
-export KERNEL_BRANCH=v4.10-rc7
-export KERNEL_VERSION=4.10.0-rc7
-export MYY_VERSION=RockMyyX-rc+
+export DTB_FILES="rk3288-miqi.dtb"
+
+export KERNEL_BRANCH=v4.10
+export KERNEL_VERSION=4.10.0
+export MYY_VERSION=RockMyyX+
 export MALI_VERSION=r16p0-00rel0
 export MALI_BASE_URL=https://developer.arm.com/-/media/Files/downloads/mali-drivers/kernel/mali-midgard-gpu
 
@@ -84,7 +86,7 @@ export ARCH=arm
 export CROSS_COMPILE=armv7a-hardfloat-linux-gnueabi-
 make mrproper
 wget -O .config "$BASE_FILES_URL/$GITHUB_REPO/$GIT_BRANCH/boot/config-$KERNEL_VERSION$MYY_VERSION"
-make rk3288-miqi.dtb zImage modules -j5
+make $DTB_FILES zImage modules -j5
 
 # Kernel compiled
 # This will just copy the kernel files and libraries in /tmp
@@ -95,7 +97,7 @@ make rk3288-miqi.dtb zImage modules -j5
 # mkdir -p $INSTALL_MOD_PATH $INSTALL_PATH $INSTALL_HDR_PATH
 # make modules_install &&
 # make install &&
-# make headers_install &&
+# make INSTALL_HDR_PATH=$INSTALL_HDR_PATH headers_install && # This command IGNORES predefined variables
 # cp arch/arm/boot/zImage $INSTALL_PATH &&
 # cp arch/arm/boot/dts/rk3288-miqi.dtb $INSTALL_PATH
 
