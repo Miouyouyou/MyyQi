@@ -4,6 +4,7 @@
 #include <linux/types.h>
 #include <linux/pkt_sched.h>
 
+#define TC_COOKIE_MAX_SIZE 16
 
 /* Action attributes */
 enum {
@@ -13,6 +14,7 @@ enum {
 	TCA_ACT_INDEX,
 	TCA_ACT_STATS,
 	TCA_ACT_PAD,
+	TCA_ACT_COOKIE,
 	__TCA_ACT_MAX
 };
 
@@ -101,8 +103,10 @@ enum {
 #define TCA_POLICE_MAX (__TCA_POLICE_MAX - 1)
 
 /* tca flags definitions */
-#define TCA_CLS_FLAGS_SKIP_HW	(1 << 0)
-#define TCA_CLS_FLAGS_SKIP_SW	(1 << 1)
+#define TCA_CLS_FLAGS_SKIP_HW	(1 << 0) /* don't offload filter to HW */
+#define TCA_CLS_FLAGS_SKIP_SW	(1 << 1) /* don't use filter in SW */
+#define TCA_CLS_FLAGS_IN_HW	(1 << 2) /* filter is offloaded to HW */
+#define TCA_CLS_FLAGS_NOT_IN_HW (1 << 3) /* filter isn't offloaded to HW */
 
 /* U32 filters */
 
@@ -416,6 +420,17 @@ enum {
 	TCA_FLOWER_KEY_ICMPV6_CODE_MASK,/* u8 */
 	TCA_FLOWER_KEY_ICMPV6_TYPE,	/* u8 */
 	TCA_FLOWER_KEY_ICMPV6_TYPE_MASK,/* u8 */
+
+	TCA_FLOWER_KEY_ARP_SIP,		/* be32 */
+	TCA_FLOWER_KEY_ARP_SIP_MASK,	/* be32 */
+	TCA_FLOWER_KEY_ARP_TIP,		/* be32 */
+	TCA_FLOWER_KEY_ARP_TIP_MASK,	/* be32 */
+	TCA_FLOWER_KEY_ARP_OP,		/* u8 */
+	TCA_FLOWER_KEY_ARP_OP_MASK,	/* u8 */
+	TCA_FLOWER_KEY_ARP_SHA,		/* ETH_ALEN */
+	TCA_FLOWER_KEY_ARP_SHA_MASK,	/* ETH_ALEN */
+	TCA_FLOWER_KEY_ARP_THA,		/* ETH_ALEN */
+	TCA_FLOWER_KEY_ARP_THA_MASK,	/* ETH_ALEN */
 
 	__TCA_FLOWER_MAX,
 };

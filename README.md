@@ -4,25 +4,14 @@ Tipping
 [![Pledgie !](https://pledgie.com/campaigns/32702.png)](https://pledgie.com/campaigns/32702)
 [![Tip with Altcoins](https://raw.githubusercontent.com/Miouyouyou/Shapeshift-Tip-button/9e13666e9d0ecc68982fdfdf3625cd24dd2fb789/Tip-with-altcoin.png)](https://shapeshift.io/shifty.html?destination=16zwQUkG29D49G6C7pzch18HjfJqMXFNrW&output=BTC)
 
-Debian packages
----------------
-
-[Debian packages containing kernels patched the same way are available in Armbian repositories](https://www.armbian.com/kernel/), thanks to [Armbian](https://www.armbian.com/)'s team. Note that Armbian also provides [Debian installation scripts](https://docs.armbian.com/User-Guide_Getting-Started/) and [cross-building scripts (Building ARM Debian images using Intel/AMD machines)](https://docs.armbian.com/Developer-Guide_Build-Preparation/).
-
-If you already have a Debian system, you'll just have to add the [beta.armbian.com](https://beta.armbian.com) Debian repository and do :
-
-    apt install linux-image-dev-rockchip linux-headers-dev-rockchip linux-dtb-dev-miqi
-
-`linux-dtb-dev-miqi` being useful if you're installing this kernel on a [MiQi](https://mqmaker.com/miqi_retailers/) board.
-
 About
 -----
 
-This is a working patched 4.10 kernel with [Mali r16p00 Kernel drivers](http://malideveloper.arm.com/resources/drivers/open-source-mali-midgard-gpu-kernel-drivers/), using the torvalds branch as a basis. This also integrate patches from Willy Tarreau, making possible to get better performances from the board. [More informations in this thread](https://forum.mqmaker.com/t/miqi-based-build-farm-finally-up-and-running/605).
+This is a working patched 4.11-rc1 kernel with [Mali r16p0 Kernel drivers](http://malideveloper.arm.com/resources/drivers/open-source-mali-midgard-gpu-kernel-drivers/), using the [torvalds branch](https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/) as a basis. This also integrate patches from Willy Tarreau, making possible to get better performances from the board. [More informations in this thread](https://forum.mqmaker.com/t/miqi-based-build-farm-finally-up-and-running/605).
 
 Currently this kernel has been tested sucessfully with the [Firefly's Mali User-space r12p0 drivers for fbdev and wayland](http://malideveloper.arm.com/resources/drivers/arm-mali-midgard-gpu-user-space-drivers/#mali-user-space-driver-r12p0-mali-t760-gnulinux), using the [OpenGL ES 3.1 and 3.2 samples of the Mali OpenGL ES SDK](http://malideveloper.arm.com/resources/sdks/opengl-es-sdk-for-linux/). Pure DRM OpenGL was also tested successfully with these drivers, using [this patched gl2mark](https://github.com/Miouyouyou/glmark2).
 
-[A few benchmarks using this kernel are available on ARMbian forums](https://forum.armbian.com/index.php/topic/2045-armbian-on-miqi-sbc-hardware/).
+[A few benchmarks using previous versions of kernels patched the same way are available on ARMbian forums](https://forum.armbian.com/index.php/topic/2045-armbian-on-miqi-sbc-hardware/).
 
 X11 drivers were not tested successfully however.
 
@@ -45,6 +34,8 @@ function download_and_apply_patches {
 	rm $patches
 }
 
+export DTB_FILES="rk3288-miqi.dtb"
+
 export KERNEL_BRANCH=v4.10
 export KERNEL_VERSION=4.10.0
 export MYY_VERSION=RockMyyX+
@@ -63,26 +54,27 @@ export KERNEL_PATCHES="
 0001-Readaptation-of-Rockchip-DRM-patches-provided-by-ARM.patch
 0002-Integrate-the-Mali-GPU-address-to-the-rk3288-and-rk3.patch
 0003-Post-Mali-Kernel-device-drivers-modifications.patch
-0005-Post-Mali-UMP-integration.patch
-0006-ARM-dts-rockchip-fix-the-regulator-s-voltage-range-o.patch
-0007-ARM-dts-rockchip-fix-the-MiQi-board-s-LED-definition.patch
-0008-ARM-dts-rockchip-add-the-MiQi-board-s-fan-definition.patch
-0009-ARM-dts-rockchip-add-support-for-1800-MHz-operation-.patch
-0010-clk-rockchip-add-all-known-operating-points-to-the-a.patch
-0011-ARM-dts-rockchip-miqi-add-turbo-mode-operating-point.patch
-0012-arm-dts-Adding-and-enabling-VPU-services-addresses-f.patch
-0013-Export-rockchip_pmu_set_idle_request-for-out-of-tree.patch
-0014-Adaptation-of-Shawn-Lin-s-patch-muting-the-MMC-drive.patch
+0004-Post-Mali-UMP-integration.patch
+0005-ARM-dts-rockchip-fix-the-regulator-s-voltage-range-o.patch
+0006-Adaptation-ARM-dts-rockchip-fix-the-MiQi-board-s-LED.patch
+0007-Adaptation-ARM-dts-rockchip-add-the-MiQi-board-s-fan.patch
+0008-ARM-dts-rockchip-add-support-for-1800-MHz-operation-.patch
+0009-clk-rockchip-add-all-known-operating-points-to-the-a.patch
+0010-Readapt-ARM-dts-rockchip-miqi-add-turbo-mode-operati.patch
+0011-arm-dts-Adding-and-enabling-VPU-services-addresses-f.patch
+0012-Export-rockchip_pmu_set_idle_request-for-out-of-tree.patch
 "
+
 export MALI_PATCHES="
 0001-Midgard-daptation-to-Linux-4.10.0-rcX-signatures.patch
 0002-UMP-Adapt-get_user_pages-calls.patch
 0003-Renamed-Kernel-DMA-Fence-structures-and-functions.patch
+0004-Few-modifications-after-v4.11-headers-and-signatures.patch
 "
 
 # Get the kernel
 
-git clone --depth 1 --branch $KERNEL_BRANCH 'git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git' &&
+git clone --depth 1 --branch v4.11-rc1 'git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git' &&
 cd linux
 
 export SRC_DIR=$PWD
@@ -114,7 +106,7 @@ export ARCH=arm
 export CROSS_COMPILE=armv7a-hardfloat-linux-gnueabi-
 make mrproper
 wget -O .config "$BASE_FILES_URL/$GITHUB_REPO/$GIT_BRANCH/boot/config-$KERNEL_VERSION$MYY_VERSION"
-make rk3288-miqi.dtb zImage modules -j5
+make $DTB_FILES zImage modules -j5
 ```
 
 This procedure was stored in the **[GetPatchAndCompileKernel.sh](./GetPatchAndCompileKernel.sh)** file and can be run like this :
@@ -131,6 +123,17 @@ Note that if you have access to U-boot through a serial console AND your MiQi is
 ```
 ums 0 mmc 1
 ```
+
+Debian packages for release versions
+------------------------------------
+
+[Debian packages containing releases versions of kernels patched the same way are available in Armbian repositories](https://www.armbian.com/kernel/), thanks to [Armbian](https://www.armbian.com/)'s team. Note that Armbian also provides [Debian installation scripts](https://docs.armbian.com/User-Guide_Getting-Started/) and [cross-building scripts (Building ARM Debian images using Intel/AMD machines)](https://docs.armbian.com/Developer-Guide_Build-Preparation/).
+
+If you already have a Debian system, you'll just have to add the [beta.armbian.com](https://beta.armbian.com) Debian repository and do :
+
+    apt install linux-image-dev-rockchip linux-headers-dev-rockchip linux-dtb-dev-miqi
+
+`linux-dtb-dev-miqi` being useful if you're installing this kernel on a [MiQi](https://mqmaker.com/miqi_retailers/) board.
 
 TODO
 ----

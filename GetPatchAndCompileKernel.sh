@@ -35,26 +35,27 @@ export KERNEL_PATCHES="
 0001-Readaptation-of-Rockchip-DRM-patches-provided-by-ARM.patch
 0002-Integrate-the-Mali-GPU-address-to-the-rk3288-and-rk3.patch
 0003-Post-Mali-Kernel-device-drivers-modifications.patch
-0005-Post-Mali-UMP-integration.patch
-0006-ARM-dts-rockchip-fix-the-regulator-s-voltage-range-o.patch
-0007-ARM-dts-rockchip-fix-the-MiQi-board-s-LED-definition.patch
-0008-ARM-dts-rockchip-add-the-MiQi-board-s-fan-definition.patch
-0009-ARM-dts-rockchip-add-support-for-1800-MHz-operation-.patch
-0010-clk-rockchip-add-all-known-operating-points-to-the-a.patch
-0011-ARM-dts-rockchip-miqi-add-turbo-mode-operating-point.patch
-0012-arm-dts-Adding-and-enabling-VPU-services-addresses-f.patch
-0013-Export-rockchip_pmu_set_idle_request-for-out-of-tree.patch
-0014-Adaptation-of-Shawn-Lin-s-patch-muting-the-MMC-drive.patch
+0004-Post-Mali-UMP-integration.patch
+0005-ARM-dts-rockchip-fix-the-regulator-s-voltage-range-o.patch
+0006-Adaptation-ARM-dts-rockchip-fix-the-MiQi-board-s-LED.patch
+0007-Adaptation-ARM-dts-rockchip-add-the-MiQi-board-s-fan.patch
+0008-ARM-dts-rockchip-add-support-for-1800-MHz-operation-.patch
+0009-clk-rockchip-add-all-known-operating-points-to-the-a.patch
+0010-Readapt-ARM-dts-rockchip-miqi-add-turbo-mode-operati.patch
+0011-arm-dts-Adding-and-enabling-VPU-services-addresses-f.patch
+0012-Export-rockchip_pmu_set_idle_request-for-out-of-tree.patch
 "
+
 export MALI_PATCHES="
 0001-Midgard-daptation-to-Linux-4.10.0-rcX-signatures.patch
 0002-UMP-Adapt-get_user_pages-calls.patch
 0003-Renamed-Kernel-DMA-Fence-structures-and-functions.patch
+0004-Few-modifications-after-v4.11-headers-and-signatures.patch
 "
 
 # Get the kernel
 
-git clone --depth 1 --branch $KERNEL_BRANCH 'git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git' &&
+git clone --depth 1 --branch v4.11-rc1 'git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git' &&
 cd linux
 
 export SRC_DIR=$PWD
@@ -78,7 +79,7 @@ cd $SRC_DIR &&
 rm -r TX011-SW-99002-$MALI_VERSION TX011-SW-99002-$MALI_VERSION.tgz
 
 # Download and apply the various kernel and Mali kernel-space driver patches
-download_and_apply_patches $KERNEL_PATCHES_FOLDER_URL $KERNEL_PATCHES
+download_patches $KERNEL_PATCHES_FOLDER_URL $KERNEL_PATCHES
 download_and_apply_patches $MALI_PATCHES_FOLDER $MALI_PATCHES
 
 # Get the configuration file and compile the kernel
@@ -86,7 +87,7 @@ export ARCH=arm
 export CROSS_COMPILE=armv7a-hardfloat-linux-gnueabi-
 make mrproper
 wget -O .config "$BASE_FILES_URL/$GITHUB_REPO/$GIT_BRANCH/boot/config-$KERNEL_VERSION$MYY_VERSION"
-make $DTB_FILES zImage modules -j5
+# make $DTB_FILES zImage modules -j5
 
 # Kernel compiled
 # This will just copy the kernel files and libraries in /tmp

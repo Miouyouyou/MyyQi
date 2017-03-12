@@ -1,0 +1,133 @@
+From de273a71af20c0cf1bd308e6649c89430cf06b52 Mon Sep 17 00:00:00 2001
+From: Myy <myy@miouyouyou.fr>
+Date: Sun, 12 Mar 2017 20:17:17 +0000
+Subject: [PATCH 11/12] arm: dts: Adding and enabling VPU services addresses
+ for RK3288 MiQi
+
+In order to use the Rockchip VPU on RK3288 devices, it is necessary to
+add the addresses of these Video Processing Units and enable them.
+
+Signed-off-by: Myy <myy@miouyouyou.fr>
+---
+ arch/arm/boot/dts/rk3288-miqi.dts |  9 ++++
+ arch/arm/boot/dts/rk3288.dtsi     | 87 +++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 96 insertions(+)
+
+diff --git a/arch/arm/boot/dts/rk3288-miqi.dts b/arch/arm/boot/dts/rk3288-miqi.dts
+index bd27f91..0ffd013 100644
+--- a/arch/arm/boot/dts/rk3288-miqi.dts
++++ b/arch/arm/boot/dts/rk3288-miqi.dts
+@@ -580,3 +580,12 @@
+   mali-supply = <&vdd_gpu>;
+   status = "okay";
+ };
++
++&hevc_service {
++	status = "okay";
++};
++
++&vpu_service {
++	status = "okay";
++};
++
+diff --git a/arch/arm/boot/dts/rk3288.dtsi b/arch/arm/boot/dts/rk3288.dtsi
+index 3bf38f1..9bc993c 100644
+--- a/arch/arm/boot/dts/rk3288.dtsi
++++ b/arch/arm/boot/dts/rk3288.dtsi
+@@ -179,6 +179,93 @@
+ 		};
+ 	};
+ 
++	vpu: video-codec@ff9a0000 {
++		compatible = "rockchip,rk3288-vpu";
++		reg = <0xff9a0000 0x800>;
++		interrupts = <GIC_SPI 9 IRQ_TYPE_LEVEL_HIGH>,
++				<GIC_SPI 10 IRQ_TYPE_LEVEL_HIGH>;
++		interrupt-names = "vepu", "vdpu";
++		clocks = <&cru ACLK_VCODEC>, <&cru HCLK_VCODEC>;
++		clock-names = "aclk", "hclk";
++		power-domains = <&power RK3288_PD_VIDEO>;
++		iommus = <&vpu_mmu>;
++		assigned-clocks = <&cru ACLK_VCODEC>;
++		assigned-clock-rates = <400000000>;
++		status = "disabled";
++	};
++
++	vpu_service: vpu-service@ff9a0000 {
++		compatible = "rockchip,vpu_service";
++		reg = <0xff9a0000 0x800>;
++		interrupts = <GIC_SPI 9 IRQ_TYPE_LEVEL_HIGH>,
++				<GIC_SPI 10 IRQ_TYPE_LEVEL_HIGH>;
++		interrupt-names = "irq_enc", "irq_dec";
++		clocks = <&cru ACLK_VCODEC>, <&cru HCLK_VCODEC>;
++		clock-names = "aclk_vcodec", "hclk_vcodec";
++		power-domains = <&power RK3288_PD_VIDEO>;
++		rockchip,grf = <&grf>;
++		resets = <&cru SRST_VCODEC_AXI>, <&cru SRST_VCODEC_AHB>;
++		reset-names = "video_a", "video_h";
++		iommus = <&vpu_mmu>;
++		iommu_enabled = <1>;
++		dev_mode = <0>;
++		status = "disabled";
++		/* 0 means ion, 1 means drm */
++		allocator = <1>;
++	};
++
++	vpu_mmu: iommu@ff9a0800 {
++		compatible = "rockchip,iommu";
++		reg = <0xff9a0800 0x100>;
++		interrupts = <GIC_SPI 11 IRQ_TYPE_LEVEL_HIGH>;
++		interrupt-names = "vpu_mmu";
++		power-domains = <&power RK3288_PD_VIDEO>;
++		#iommu-cells = <0>;
++	};
++
++	hevc_service: hevc-service@ff9c0000 {
++		compatible = "rockchip,hevc_service";
++		reg = <0xff9c0000 0x400>;
++		interrupts = <GIC_SPI 12 IRQ_TYPE_LEVEL_HIGH>;
++		interrupt-names = "irq_dec";
++		clocks = <&cru ACLK_HEVC>, <&cru HCLK_HEVC>,
++			<&cru SCLK_HEVC_CORE>,
++			<&cru SCLK_HEVC_CABAC>;
++		clock-names = "aclk_vcodec", "hclk_vcodec", "clk_core",
++			"clk_cabac";
++		/*
++		 * The 4K hevc would also work well with 500/125/300/300,
++		 * no more err irq and reset request.
++		 */
++		assigned-clocks = <&cru ACLK_HEVC>, <&cru HCLK_HEVC>,
++				  <&cru SCLK_HEVC_CORE>,
++				  <&cru SCLK_HEVC_CABAC>;
++		assigned-clock-rates = <400000000>, <100000000>,
++				       <300000000>, <300000000>;
++
++		resets = <&cru SRST_HEVC>;
++		reset-names = "video";
++		power-domains = <&power RK3288_PD_HEVC>;
++		rockchip,grf = <&grf>;
++		dev_mode = <1>;
++		iommus = <&hevc_mmu>;
++		iommu_enabled = <1>;
++		status = "disabled";
++		/* 0 means ion, 1 means drm */
++		allocator = <1>;
++	};
++
++	hevc_mmu: iommu@ff9c0440 {
++		compatible = "rockchip,iommu";
++		reg = <0xff9c0440 0x40>, <0xff9c0480 0x40>;
++		interrupts = <GIC_SPI 111 IRQ_TYPE_LEVEL_HIGH>;
++		interrupt-names = "hevc_mmu";
++		power-domains = <&power RK3288_PD_HEVC>;
++		#iommu-cells = <0>;
++	};
++
++
++
+ 	gpu: mali@ffa30000 {
+ 		compatible = "arm,malit764",
+ 			     "arm,malit76x",
+-- 
+2.10.2
+
