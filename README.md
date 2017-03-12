@@ -36,9 +36,10 @@ function download_and_apply_patches {
 
 export DTB_FILES="rk3288-miqi.dtb"
 
-export KERNEL_BRANCH=v4.10
-export KERNEL_VERSION=4.10.0
-export MYY_VERSION=RockMyyX+
+export KERNEL_SERIES=v4.11
+export KERNEL_BRANCH=v4.11-rc1
+export KERNEL_VERSION=4.11.0-rc1
+export MYY_VERSION=4MyyQ11+
 export MALI_VERSION=r16p0-00rel0
 export MALI_BASE_URL=https://developer.arm.com/-/media/Files/downloads/mali-drivers/kernel/mali-midgard-gpu
 
@@ -47,7 +48,7 @@ export GIT_BRANCH=master
 
 export BASE_FILES_URL=https://raw.githubusercontent.com
 export PATCHES_FOLDER_URL=$BASE_FILES_URL/$GITHUB_REPO/$GIT_BRANCH/patches
-export KERNEL_PATCHES_FOLDER_URL=$PATCHES_FOLDER_URL/kernel/$KERNEL_BRANCH
+export KERNEL_PATCHES_FOLDER_URL=$PATCHES_FOLDER_URL/kernel/$KERNEL_SERIES
 export MALI_PATCHES_FOLDER=$PATCHES_FOLDER_URL/Mali/$MALI_VERSION
 
 export KERNEL_PATCHES="
@@ -74,7 +75,7 @@ export MALI_PATCHES="
 
 # Get the kernel
 
-git clone --depth 1 --branch v4.11-rc1 'git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git' &&
+git clone --depth 1 --branch $KERNEL_BRANCH 'git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git' &&
 cd linux
 
 export SRC_DIR=$PWD

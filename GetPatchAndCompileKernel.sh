@@ -17,9 +17,10 @@ function download_and_apply_patches {
 
 export DTB_FILES="rk3288-miqi.dtb"
 
-export KERNEL_BRANCH=v4.10
-export KERNEL_VERSION=4.10.0
-export MYY_VERSION=RockMyyX+
+export KERNEL_SERIES=v4.11
+export KERNEL_BRANCH=v4.11-rc1
+export KERNEL_VERSION=4.11.0-rc1
+export MYY_VERSION=4MyyQ11+
 export MALI_VERSION=r16p0-00rel0
 export MALI_BASE_URL=https://developer.arm.com/-/media/Files/downloads/mali-drivers/kernel/mali-midgard-gpu
 
@@ -28,7 +29,7 @@ export GIT_BRANCH=master
 
 export BASE_FILES_URL=https://raw.githubusercontent.com
 export PATCHES_FOLDER_URL=$BASE_FILES_URL/$GITHUB_REPO/$GIT_BRANCH/patches
-export KERNEL_PATCHES_FOLDER_URL=$PATCHES_FOLDER_URL/kernel/$KERNEL_BRANCH
+export KERNEL_PATCHES_FOLDER_URL=$PATCHES_FOLDER_URL/kernel/$KERNEL_SERIES
 export MALI_PATCHES_FOLDER=$PATCHES_FOLDER_URL/Mali/$MALI_VERSION
 
 export KERNEL_PATCHES="
@@ -55,7 +56,7 @@ export MALI_PATCHES="
 
 # Get the kernel
 
-git clone --depth 1 --branch v4.11-rc1 'git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git' &&
+git clone --depth 1 --branch $KERNEL_BRANCH 'git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git' &&
 cd linux
 
 export SRC_DIR=$PWD
@@ -79,7 +80,7 @@ cd $SRC_DIR &&
 rm -r TX011-SW-99002-$MALI_VERSION TX011-SW-99002-$MALI_VERSION.tgz
 
 # Download and apply the various kernel and Mali kernel-space driver patches
-download_patches $KERNEL_PATCHES_FOLDER_URL $KERNEL_PATCHES
+download_and_apply_patches $KERNEL_PATCHES_FOLDER_URL $KERNEL_PATCHES
 download_and_apply_patches $MALI_PATCHES_FOLDER $MALI_PATCHES
 
 # Get the configuration file and compile the kernel
@@ -87,7 +88,7 @@ export ARCH=arm
 export CROSS_COMPILE=armv7a-hardfloat-linux-gnueabi-
 make mrproper
 wget -O .config "$BASE_FILES_URL/$GITHUB_REPO/$GIT_BRANCH/boot/config-$KERNEL_VERSION$MYY_VERSION"
-# make $DTB_FILES zImage modules -j5
+make $DTB_FILES zImage modules -j5
 
 # Kernel compiled
 # This will just copy the kernel files and libraries in /tmp
