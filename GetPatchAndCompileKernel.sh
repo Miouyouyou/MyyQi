@@ -18,9 +18,9 @@ function download_and_apply_patches {
 export DTB_FILES="rk3288-miqi.dtb"
 
 export KERNEL_SERIES=v4.11
-export KERNEL_BRANCH=v4.11-rc1
-export KERNEL_VERSION=4.11.0-rc1
-export MYY_VERSION=4MyyQ11+
+export KERNEL_BRANCH=v4.11-rc2
+export KERNEL_VERSION=4.11.0-rc2
+export MYY_VERSION=-MyyQi-Eleven+
 export MALI_VERSION=r16p0-00rel0
 export MALI_BASE_URL=https://developer.arm.com/-/media/Files/downloads/mali-drivers/kernel/mali-midgard-gpu
 
