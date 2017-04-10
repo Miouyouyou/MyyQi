@@ -18,8 +18,8 @@ function download_and_apply_patches {
 export DTB_FILES="rk3288-miqi.dtb"
 
 export KERNEL_SERIES=v4.11
-export KERNEL_BRANCH=v4.11-rc4
-export KERNEL_VERSION=4.11.0-rc4
+export KERNEL_BRANCH=v4.11-rc6
+export KERNEL_VERSION=4.11.0-rc6
 export MYY_VERSION=-MyyQi-Eleven+
 export MALI_VERSION=r16p0-00rel0
 export MALI_BASE_URL=https://developer.arm.com/-/media/Files/downloads/mali-drivers/kernel/mali-midgard-gpu
@@ -89,17 +89,18 @@ export CROSS_COMPILE=armv7a-hardfloat-linux-gnueabi-
 make mrproper
 wget -O .config "$BASE_FILES_URL/$GITHUB_REPO/$GIT_BRANCH/boot/config-$KERNEL_VERSION$MYY_VERSION"
 make $DTB_FILES zImage modules -j5
+exit 0
 
 # Kernel compiled
 # This will just copy the kernel files and libraries in /tmp
 # This part is only useful if you're cross-compiling the kernel, of course
-# export INSTALL_MOD_PATH=/tmp/MyyQi
-# export INSTALL_PATH=/tmp/MyyQi/boot
-# export INSTALL_HDR_PATH=/tmp/MyyQi/usr
-# mkdir -p $INSTALL_MOD_PATH $INSTALL_PATH $INSTALL_HDR_PATH
-# make modules_install &&
-# make install &&
-# make INSTALL_HDR_PATH=$INSTALL_HDR_PATH headers_install && # This command IGNORES predefined variables
-# cp arch/arm/boot/zImage $INSTALL_PATH &&
-# cp arch/arm/boot/dts/rk3288-miqi.dtb $INSTALL_PATH
+export INSTALL_MOD_PATH=/tmp/MyyQi
+export INSTALL_PATH=/tmp/MyyQi/boot
+export INSTALL_HDR_PATH=/tmp/MyyQi/usr
+mkdir -p $INSTALL_MOD_PATH $INSTALL_PATH $INSTALL_HDR_PATH
+make modules_install &&
+make install &&
+make INSTALL_HDR_PATH=$INSTALL_HDR_PATH headers_install && # This command IGNORES predefined variables
+cp arch/arm/boot/zImage $INSTALL_PATH &&
+cp arch/arm/boot/dts/rk3288-miqi.dtb $INSTALL_PATH
 

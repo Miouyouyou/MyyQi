@@ -7,7 +7,7 @@ Tipping
 About
 -----
 
-This is a working patched 4.11-rc1 kernel with [Mali r16p0 Kernel drivers](http://malideveloper.arm.com/resources/drivers/open-source-mali-midgard-gpu-kernel-drivers/), using the [torvalds branch](https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/) as a basis. This also integrate patches from Willy Tarreau, making possible to get better performances from the board. [More informations in this thread](https://forum.mqmaker.com/t/miqi-based-build-farm-finally-up-and-running/605).
+This is a working patched 4.11-rc6 kernel with [Mali r16p0 Kernel drivers](http://malideveloper.arm.com/resources/drivers/open-source-mali-midgard-gpu-kernel-drivers/), using the [torvalds branch](https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/) as a basis. This also integrate patches from Willy Tarreau, making possible to get better performances from the board. [More informations in this thread](https://forum.mqmaker.com/t/miqi-based-build-farm-finally-up-and-running/605).
 
 Currently this kernel has been tested sucessfully with the [Firefly's Mali User-space r12p0 drivers for fbdev and wayland](http://malideveloper.arm.com/resources/drivers/arm-mali-midgard-gpu-user-space-drivers/#mali-user-space-driver-r12p0-mali-t760-gnulinux), using the [OpenGL ES 3.1 and 3.2 samples of the Mali OpenGL ES SDK](http://malideveloper.arm.com/resources/sdks/opengl-es-sdk-for-linux/). Pure DRM OpenGL was also tested successfully with these drivers, using [this patched gl2mark](https://github.com/Miouyouyou/glmark2).
 
@@ -37,9 +37,9 @@ function download_and_apply_patches {
 export DTB_FILES="rk3288-miqi.dtb"
 
 export KERNEL_SERIES=v4.11
-export KERNEL_BRANCH=v4.11-rc1
-export KERNEL_VERSION=4.11.0-rc1
-export MYY_VERSION=4MyyQ11+
+export KERNEL_BRANCH=v4.11-rc6
+export KERNEL_VERSION=4.11.0-rc6
+export MYY_VERSION=-MyyQi-Eleven+
 export MALI_VERSION=r16p0-00rel0
 export MALI_BASE_URL=https://developer.arm.com/-/media/Files/downloads/mali-drivers/kernel/mali-midgard-gpu
 
