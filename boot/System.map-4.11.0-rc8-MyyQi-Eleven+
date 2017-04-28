@@ -84386,7 +84386,7 @@ c11c2d58 T __security_initcall_start
 c11c2d5c T __initramfs_start
 c11c2d5c t __irf_start
 c11c2d5c T __security_initcall_end
-c11c2de2 t __irf_end
+c11c2de1 t __irf_end
 c11c2de8 T __initramfs_size
 c11c3000 D __per_cpu_load
 c11c3000 D __per_cpu_start
