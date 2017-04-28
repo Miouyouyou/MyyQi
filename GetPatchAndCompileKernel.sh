@@ -15,7 +15,7 @@ function download_and_apply_patches {
 	rm $patches
 }
 
-export DTB_FILES="rk3288-miqi.dtb"
+export DTB_FILES="rk3288-miqi.dtb rk3288-miniarm.dtb"
 
 export KERNEL_SERIES=v4.11
 export KERNEL_BRANCH=v4.11-rc8
@@ -45,6 +45,8 @@ export KERNEL_PATCHES="
 0010-Readapt-ARM-dts-rockchip-miqi-add-turbo-mode-operati.patch
 0011-arm-dts-Adding-and-enabling-VPU-services-addresses-f.patch
 0012-Export-rockchip_pmu_set_idle_request-for-out-of-tree.patch
+0100-Tinkerboard-support.patch
+0101-First-Mali-integration-test-for-ASUS-Tinkerboards.patch
 "
 
 export MALI_PATCHES="
@@ -102,5 +104,5 @@ make modules_install &&
 make install &&
 make INSTALL_HDR_PATH=$INSTALL_HDR_PATH headers_install && # This command IGNORES predefined variables
 cp arch/arm/boot/zImage $INSTALL_PATH &&
-cp arch/arm/boot/dts/rk3288-miqi.dtb $INSTALL_PATH
+cp arch/arm/boot/dts/*.dtb $INSTALL_PATH
 
