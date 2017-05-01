@@ -19,7 +19,7 @@ export DTB_FILES="rk3288-miqi.dtb rk3288-miniarm.dtb"
 
 export KERNEL_SERIES=v4.11
 export KERNEL_BRANCH=v4.11
-export KERNEL_VERSION=4.11.0-rc8
+export KERNEL_VERSION=4.11.0
 export MYY_VERSION=-MyyQi-Eleven+
 export MALI_VERSION=r16p0-00rel0
 export MALI_BASE_URL=https://developer.arm.com/-/media/Files/downloads/mali-drivers/kernel/mali-midgard-gpu
