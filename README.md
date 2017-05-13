@@ -27,7 +27,8 @@ Currently this kernel has been tested sucessfully with the [Firefly's Mali User-
 X11 drivers were not tested successfully however.
 
 The kernel was compiled using the following procedure :
-```function download_patches {
+```bash
+function download_patches {
 	base_url=$1
 	patches=${@:2}
 	for patch in $patches; do
@@ -44,7 +45,26 @@ function download_and_apply_patches {
 	rm $patches
 }
 
-export DTB_FILES="rk3288-miqi.dtb rk3288-miniarm.dtb"
+export DTB_FILES="
+rk3288-evb-act8846.dtb
+rk3288-evb-rk808.dtb
+rk3288-fennec.dtb
+rk3288-firefly-beta.dtb
+rk3288-firefly-reload.dtb
+rk3288-firefly.dtb
+rk3288-miniarm.dtb
+rk3288-miqi.dtb
+rk3288-popmetal.dtb
+rk3288-r89.dtb
+rk3288-rock2-square.dtb
+rk3288-veyron-brain.dtb
+rk3288-veyron-jaq.dtb
+rk3288-veyron-jerry.dtb
+rk3288-veyron-mickey.dtb
+rk3288-veyron-minnie.dtb
+rk3288-veyron-pinky.dtb
+rk3288-veyron-speedy.dtb
+"
 
 export KERNEL_SERIES=v4.11
 export KERNEL_BRANCH=v4.11
@@ -120,6 +140,7 @@ export CROSS_COMPILE=armv7a-hardfloat-linux-gnueabi-
 make mrproper
 wget -O .config "$BASE_FILES_URL/$GITHUB_REPO/$GIT_BRANCH/boot/config-$KERNEL_VERSION$MYY_VERSION"
 make $DTB_FILES zImage modules -j5
+exit 0
 ```
 
 This procedure was stored in the **[GetPatchAndCompileKernel.sh](./GetPatchAndCompileKernel.sh)** file and can be run like this :
