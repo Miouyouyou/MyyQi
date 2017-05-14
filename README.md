@@ -94,6 +94,7 @@ export KERNEL_PATCHES="
 0010-Readapt-ARM-dts-rockchip-miqi-add-turbo-mode-operati.patch
 0011-arm-dts-Adding-and-enabling-VPU-services-addresses-f.patch
 0012-Export-rockchip_pmu_set_idle_request-for-out-of-tree.patch
+0013-clk-rockchip-rk3288-prefer-vdpu-for-vcodec-clock-sou.patch
 0100-Tinkerboard-support.patch
 0101-First-Mali-integration-test-for-ASUS-Tinkerboards.patch
 "
@@ -140,7 +141,6 @@ export CROSS_COMPILE=armv7a-hardfloat-linux-gnueabi-
 make mrproper
 wget -O .config "$BASE_FILES_URL/$GITHUB_REPO/$GIT_BRANCH/boot/config-$KERNEL_VERSION$MYY_VERSION"
 make $DTB_FILES zImage modules -j5
-exit 0
 ```
 
 This procedure was stored in the **[GetPatchAndCompileKernel.sh](./GetPatchAndCompileKernel.sh)** file and can be run like this :
