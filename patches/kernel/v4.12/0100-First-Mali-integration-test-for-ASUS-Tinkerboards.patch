@@ -1,0 +1,40 @@
+From 2a888ab3f7478b6b8943fa02a38aed1144f5df60 Mon Sep 17 00:00:00 2001
+From: Myy <myy@miouyouyou.fr>
+Date: Wed, 17 May 2017 07:17:11 +0000
+Subject: [PATCH 1/2] First Mali integration test for ASUS Tinkerboards
+
+This is not tested !
+
+This *should* enable the Mali and VCodec drivers support.
+
+Signed-off-by: Myy <myy@miouyouyou.fr>
+---
+ arch/arm/boot/dts/rk3288-tinker.dts | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
+
+diff --git a/arch/arm/boot/dts/rk3288-tinker.dts b/arch/arm/boot/dts/rk3288-tinker.dts
+index f601c78..4b8155b 100644
+--- a/arch/arm/boot/dts/rk3288-tinker.dts
++++ b/arch/arm/boot/dts/rk3288-tinker.dts
+@@ -534,3 +534,18 @@
+ &wdt {
+ 	status = "okay";
+ };
++
++/* Support for Mali and Video codecs services */
++&gpu {
++  mali-supply = <&vdd_gpu>;
++  status = "okay";
++};
++
++&hevc_service {
++	status = "okay";
++};
++
++&vpu_service {
++	status = "okay";
++};
++
+-- 
+2.10.2
+

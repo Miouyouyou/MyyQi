@@ -22,7 +22,7 @@ rk3288-fennec.dtb
 rk3288-firefly-beta.dtb
 rk3288-firefly-reload.dtb
 rk3288-firefly.dtb
-rk3288-miniarm.dtb
+rk3288-tinker.dtb
 rk3288-miqi.dtb
 rk3288-popmetal.dtb
 rk3288-r89.dtb
@@ -37,10 +37,10 @@ rk3288-veyron-speedy.dtb
 "
 
 export KERNEL_SERIES=v4.11
-export KERNEL_BRANCH=v4.11
+export KERNEL_BRANCH=v4.12-rc1
 export KERNEL_VERSION=4.11.0
 export MYY_VERSION=-MyyQi-Eleven+
-export MALI_VERSION=r16p0-00rel0
+export MALI_VERSION=r17p0-01rel0
 export MALI_BASE_URL=https://developer.arm.com/-/media/Files/downloads/mali-drivers/kernel/mali-midgard-gpu
 
 export GITHUB_REPO=Miouyouyou/MyyQi
@@ -57,7 +57,6 @@ export KERNEL_PATCHES="
 0003-Post-Mali-Kernel-device-drivers-modifications.patch
 0004-Post-Mali-UMP-integration.patch
 0005-ARM-dts-rockchip-fix-the-regulator-s-voltage-range-o.patch
-0006-Adaptation-ARM-dts-rockchip-fix-the-MiQi-board-s-LED.patch
 0007-Adaptation-ARM-dts-rockchip-add-the-MiQi-board-s-fan.patch
 0008-ARM-dts-rockchip-add-support-for-1800-MHz-operation-.patch
 0009-clk-rockchip-add-all-known-operating-points-to-the-a.patch
@@ -65,7 +64,6 @@ export KERNEL_PATCHES="
 0011-arm-dts-Adding-and-enabling-VPU-services-addresses-f.patch
 0012-Export-rockchip_pmu_set_idle_request-for-out-of-tree.patch
 0013-clk-rockchip-rk3288-prefer-vdpu-for-vcodec-clock-sou.patch
-0100-Tinkerboard-support.patch
 0101-First-Mali-integration-test-for-ASUS-Tinkerboards.patch
 "
 
@@ -102,14 +100,15 @@ cd $SRC_DIR &&
 rm -r TX011-SW-99002-$MALI_VERSION TX011-SW-99002-$MALI_VERSION.tgz
 
 # Download and apply the various kernel and Mali kernel-space driver patches
-download_and_apply_patches $KERNEL_PATCHES_FOLDER_URL $KERNEL_PATCHES
-download_and_apply_patches $MALI_PATCHES_FOLDER $MALI_PATCHES
+download_patches $KERNEL_PATCHES_FOLDER_URL $KERNEL_PATCHES
+download_patches $MALI_PATCHES_FOLDER $MALI_PATCHES
 
 # Get the configuration file and compile the kernel
 export ARCH=arm
 export CROSS_COMPILE=armv7a-hardfloat-linux-gnueabi-
 make mrproper
 wget -O .config "$BASE_FILES_URL/$GITHUB_REPO/$GIT_BRANCH/boot/config-$KERNEL_VERSION$MYY_VERSION"
+exit 0
 make $DTB_FILES zImage modules -j5
 exit 0
 
