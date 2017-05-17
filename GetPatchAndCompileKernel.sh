@@ -36,9 +36,9 @@ rk3288-veyron-pinky.dtb
 rk3288-veyron-speedy.dtb
 "
 
-export KERNEL_SERIES=v4.11
+export KERNEL_SERIES=v4.12
 export KERNEL_BRANCH=v4.12-rc1
-export KERNEL_VERSION=4.11.0
+export KERNEL_VERSION=4.12.0-rc1
 export MYY_VERSION=-MyyQi-Eleven+
 export MALI_VERSION=r17p0-01rel0
 export MALI_BASE_URL=https://developer.arm.com/-/media/Files/downloads/mali-drivers/kernel/mali-midgard-gpu
@@ -64,7 +64,7 @@ export KERNEL_PATCHES="
 0011-arm-dts-Adding-and-enabling-VPU-services-addresses-f.patch
 0012-Export-rockchip_pmu_set_idle_request-for-out-of-tree.patch
 0013-clk-rockchip-rk3288-prefer-vdpu-for-vcodec-clock-sou.patch
-0101-First-Mali-integration-test-for-ASUS-Tinkerboards.patch
+0100-First-Mali-integration-test-for-ASUS-Tinkerboards.patch
 "
 
 export MALI_PATCHES="
@@ -72,6 +72,7 @@ export MALI_PATCHES="
 0002-UMP-Adapt-get_user_pages-calls.patch
 0003-Renamed-Kernel-DMA-Fence-structures-and-functions.patch
 0004-Few-modifications-after-v4.11-headers-and-signatures.patch
+0005-Using-the-new-header-on-4.12-kernels-for-copy_-_user.patch
 "
 
 # Get the kernel
@@ -108,7 +109,6 @@ export ARCH=arm
 export CROSS_COMPILE=armv7a-hardfloat-linux-gnueabi-
 make mrproper
 wget -O .config "$BASE_FILES_URL/$GITHUB_REPO/$GIT_BRANCH/boot/config-$KERNEL_VERSION$MYY_VERSION"
-exit 0
 make $DTB_FILES zImage modules -j5
 exit 0
 
