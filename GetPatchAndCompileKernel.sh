@@ -39,7 +39,7 @@ rk3288-veyron-speedy.dtb
 export KERNEL_SERIES=v4.12
 export KERNEL_BRANCH=v4.12-rc1
 export KERNEL_VERSION=4.12.0-rc1
-export MYY_VERSION=-MyyQi-Eleven+
+export MYY_VERSION=-The-Twelve-MyyQi+
 export MALI_VERSION=r17p0-01rel0
 export MALI_BASE_URL=https://developer.arm.com/-/media/Files/downloads/mali-drivers/kernel/mali-midgard-gpu
 
@@ -101,8 +101,8 @@ cd $SRC_DIR &&
 rm -r TX011-SW-99002-$MALI_VERSION TX011-SW-99002-$MALI_VERSION.tgz
 
 # Download and apply the various kernel and Mali kernel-space driver patches
-download_patches $KERNEL_PATCHES_FOLDER_URL $KERNEL_PATCHES
-download_patches $MALI_PATCHES_FOLDER $MALI_PATCHES
+download_and_apply_patches $KERNEL_PATCHES_FOLDER_URL $KERNEL_PATCHES
+download_and_apply_patches $MALI_PATCHES_FOLDER $MALI_PATCHES
 
 # Get the configuration file and compile the kernel
 export ARCH=arm
