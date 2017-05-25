@@ -107,8 +107,21 @@ export MALI_PATCHES="
 
 # Get the kernel
 
-git clone --depth 1 --branch $KERNEL_BRANCH 'git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git' &&
-cd linux
+# If we haven't already clone the Linux Kernel tree, clone it and move
+# into the linux folder created during the cloning.
+if [ ! -d "linux" ]; then
+  git clone --depth 1 --branch $KERNEL_BRANCH 'git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git' &&
+  cd linux
+else
+  # We have already cloned a previous instance, however this instance
+  # might not be clean. Remove all untracked files and rewind all the
+  # applied patches.
+  cd linux &&
+  # Remove all untracked files. These are residues from failed runs
+  git clean -fdx &&
+  # Rewind modified files to their initial state.
+  git checkout -- .
+fi
 
 export SRC_DIR=$PWD
 
