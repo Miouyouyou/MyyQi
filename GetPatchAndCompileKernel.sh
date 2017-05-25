@@ -37,8 +37,8 @@ rk3288-veyron-speedy.dtb
 "
 
 export KERNEL_SERIES=v4.12
-export KERNEL_BRANCH=v4.12-rc1
-export KERNEL_VERSION=4.12.0-rc1
+export KERNEL_BRANCH=v4.12-rc2
+export KERNEL_VERSION=4.12.0-rc2
 export MYY_VERSION=-The-Twelve-MyyQi+
 export MALI_VERSION=r17p0-01rel0
 export MALI_BASE_URL=https://developer.arm.com/-/media/Files/downloads/mali-drivers/kernel/mali-midgard-gpu
