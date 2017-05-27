@@ -28,22 +28,11 @@ X11 drivers were not tested successfully however.
 
 The kernel was compiled using the following procedure :
 ```bash
-function download_patches {
-	base_url=$1
-	patches=${@:2}
-	for patch in $patches; do
-		wget $base_url/$patch ||
-		{ echo "Could not download $patch"; exit 1; }
-	done
-}
-
-function download_and_apply_patches {
-	base_url=$1
-	patches=${@:2}
-	download_patches $base_url $patches
-	git apply $patches
-	rm $patches
-}
+export ARCH=arm
+export CROSS_COMPILE=armv7a-hardfloat-linux-gnueabi-
+if [ -z ${MAKE_CONFIG+x} ]; then
+  export MAKE_CONFIG=oldconfig
+fi
 
 export DTB_FILES="
 rk3288-evb-act8846.dtb
@@ -105,53 +94,76 @@ export MALI_PATCHES="
 0005-Using-the-new-header-on-4.12-kernels-for-copy_-_user.patch
 "
 
+# -- Helper functions
+
+function download_patches {
+	base_url=$1
+	patches=${@:2}
+	for patch in $patches; do
+		wget $base_url/$patch ||
+		{ echo "Could not download $patch"; exit 1; }
+	done
+}
+
+function download_and_apply_patches {
+	base_url=$1
+	patches=${@:2}
+	download_patches $base_url $patches
+	git apply $patches
+	rm $patches
+}
+
 # Get the kernel
 
 # If we haven't already clone the Linux Kernel tree, clone it and move
 # into the linux folder created during the cloning.
 if [ ! -d "linux" ]; then
-  git clone --depth 1 --branch $KERNEL_BRANCH 'git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git' &&
-  cd linux
-else
-  # We have already cloned a previous instance, however this instance
-  # might not be clean. Remove all untracked files and rewind all the
-  # applied patches.
-  cd linux &&
+  git clone --depth 1 --branch $KERNEL_BRANCH 'git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git'
+fi
+cd linux
+export SRC_DIR=$PWD
+
+# Check if the tree is patched
+if [ ! -e ".is_patched" ]; then
+  # If not, cleanup, apply the patches, commit and mark the tree as 
+  # patched
+  
   # Remove all untracked files. These are residues from failed runs
   git clean -fdx &&
   # Rewind modified files to their initial state.
   git checkout -- .
+
+  # Download, prepare and copy the Mali Kernel-Space drivers. 
+  # Some TGZ are AWFULLY packaged with everything having 0777 rights.
+  
+  wget "$MALI_BASE_URL/TX011-SW-99002-$MALI_VERSION.tgz" &&
+  tar zxvf TX011-SW-99002-$MALI_VERSION.tgz &&
+  cd TX011-SW-99002-$MALI_VERSION &&
+  find . -type 'f' -exec chmod 0644 {} ';' && # Every file   should have -rw-r--r-- rights
+  find . -type 'd' -exec chmod 0755 {} ';' && # Every folder should have drwxr-xr-x rights
+  find . -name 'sconscript' -exec rm {} ';' && # Remove sconscript files. Useless.
+  cd driver/product/kernel &&
+  rm -r 'patches' 'license.txt' && # Remove the patches and GPL license file.
+  cp -r drivers/gpu/arm  $SRC_DIR/drivers/gpu/ && # Copy the Midgard code
+  cp -r drivers/base/ump $SRC_DIR/drivers/base/ && # Copy the Unified Memory Provider code
+  cp include/linux/ump*  $SRC_DIR/include/linux/ && # Copy the Unified Memory Provider headers.
+  cp include/linux/kds.h $SRC_DIR/include/linux/ && # Copy the Kernel Dependency System header ↑ (dependency)
+  cd $SRC_DIR &&
+  rm -r TX011-SW-99002-$MALI_VERSION TX011-SW-99002-$MALI_VERSION.tgz
+  
+  # Download and apply the various kernel and Mali kernel-space driver patches
+  download_and_apply_patches $KERNEL_PATCHES_FOLDER_URL $KERNEL_PATCHES
+  download_and_apply_patches $MALI_PATCHES_FOLDER $MALI_PATCHES
+
+  # Cleanup, get the configuration file and mark the tree as patched
+  make mrproper &&
+  wget -O .config "$BASE_FILES_URL/$GITHUB_REPO/$GIT_BRANCH/boot/config-$KERNEL_VERSION$MYY_VERSION" &&
+  git add . &&
+  git commit -m "Apply ALL THE PATCHES !" &&
+  touch .is_patched
 fi
 
-export SRC_DIR=$PWD
-
-# Download, prepare and copy the Mali Kernel-Space drivers. 
-# Some TGZ are AWFULLY packaged with everything having 0777 rights.
-
-wget "$MALI_BASE_URL/TX011-SW-99002-$MALI_VERSION.tgz" &&
-tar zxvf TX011-SW-99002-$MALI_VERSION.tgz &&
-cd TX011-SW-99002-$MALI_VERSION &&
-find . -type 'f' -exec chmod 0644 {} ';' && # Every file   should have -rw-r--r-- rights
-find . -type 'd' -exec chmod 0755 {} ';' && # Every folder should have drwxr-xr-x rights
-find . -name 'sconscript' -exec rm {} ';' && # Remove sconscript files. Useless.
-cd driver/product/kernel &&
-rm -r 'patches' 'license.txt' && # Remove the patches and GPL license file.
-cp -r drivers/gpu/arm  $SRC_DIR/drivers/gpu/ && # Copy the Midgard code
-cp -r drivers/base/ump $SRC_DIR/drivers/base/ && # Copy the Unified Memory Provider code
-cp include/linux/ump*  $SRC_DIR/include/linux/ && # Copy the Unified Memory Provider headers.
-cp include/linux/kds.h $SRC_DIR/include/linux/ && # Copy the Kernel Dependency System header ↑ (dependency)
-cd $SRC_DIR &&
-rm -r TX011-SW-99002-$MALI_VERSION TX011-SW-99002-$MALI_VERSION.tgz
-
-# Download and apply the various kernel and Mali kernel-space driver patches
-download_and_apply_patches $KERNEL_PATCHES_FOLDER_URL $KERNEL_PATCHES
-download_and_apply_patches $MALI_PATCHES_FOLDER $MALI_PATCHES
-
-# Get the configuration file and compile the kernel
-export ARCH=arm
-export CROSS_COMPILE=armv7a-hardfloat-linux-gnueabi-
-make mrproper
-wget -O .config "$BASE_FILES_URL/$GITHUB_REPO/$GIT_BRANCH/boot/config-$KERNEL_VERSION$MYY_VERSION"
+make $MAKE_CONFIG
 make $DTB_FILES zImage modules -j5
 exit 0
 ```
