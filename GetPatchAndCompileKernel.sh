@@ -64,7 +64,7 @@ export MALI_PATCHES="
 0005-Using-the-new-header-on-4.12-kernels-for-copy_-_user.patch
 "
 
-# Functions
+# -- Helper functions
 
 function download_patches {
 	base_url=$1
@@ -126,11 +126,15 @@ if [ ! -e ".is_patched" ]; then
   download_and_apply_patches $MALI_PATCHES_FOLDER $MALI_PATCHES
 
   # Cleanup, get the configuration file and mark the tree as patched
-  make mrproper &&
-  wget -O .config "$BASE_FILES_URL/$GITHUB_REPO/$GIT_BRANCH/boot/config-$KERNEL_VERSION$MYY_VERSION" &&
   git add . &&
   git commit -m "Apply ALL THE PATCHES !" &&
   touch .is_patched
+fi
+
+# Download a .config file if none present
+if [ ! -e ".config" ]; then
+  make mrproper &&
+  wget -O .config "$BASE_FILES_URL/$GITHUB_REPO/$GIT_BRANCH/boot/config-$KERNEL_VERSION$MYY_VERSION"
 fi
 
 make $MAKE_CONFIG

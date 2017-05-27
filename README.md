@@ -156,16 +156,19 @@ if [ ! -e ".is_patched" ]; then
   download_and_apply_patches $MALI_PATCHES_FOLDER $MALI_PATCHES
 
   # Cleanup, get the configuration file and mark the tree as patched
-  make mrproper &&
-  wget -O .config "$BASE_FILES_URL/$GITHUB_REPO/$GIT_BRANCH/boot/config-$KERNEL_VERSION$MYY_VERSION" &&
   git add . &&
   git commit -m "Apply ALL THE PATCHES !" &&
   touch .is_patched
 fi
 
+# Download a .config file if none present
+if [ ! -e ".config" ]; then
+  make mrproper &&
+  wget -O .config "$BASE_FILES_URL/$GITHUB_REPO/$GIT_BRANCH/boot/config-$KERNEL_VERSION$MYY_VERSION"
+fi
+
 make $MAKE_CONFIG
 make $DTB_FILES zImage modules -j5
-exit 0
 ```
 
 This procedure was stored in the **[GetPatchAndCompileKernel.sh](./GetPatchAndCompileKernel.sh)** file and can be run like this :
