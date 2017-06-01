@@ -54,6 +54,7 @@ export KERNEL_PATCHES="
 0011-arm-dts-Adding-and-enabling-VPU-services-addresses-f.patch
 0012-Export-rockchip_pmu_set_idle_request-for-out-of-tree.patch
 0013-clk-rockchip-rk3288-prefer-vdpu-for-vcodec-clock-sou.patch
+0014-First-tinkerboard-Wifi-driver-addition-tentative.patch
 0100-First-Mali-integration-test-for-ASUS-Tinkerboards.patch
 "
 
