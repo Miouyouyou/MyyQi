@@ -18,7 +18,7 @@ If you already have a Debian system, you'll just have to add the [beta.armbian.c
 About
 -----
 
-This is a working patched 4.12-rc2 kernel with [Mali r17p0 Kernel drivers](http://malideveloper.arm.com/resources/drivers/open-source-mali-midgard-gpu-kernel-drivers/), using the [torvalds branch](https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/) as a basis. This also integrate patches from Willy Tarreau, making possible to get better performances from the board. [More informations in this thread](https://forum.mqmaker.com/t/miqi-based-build-farm-finally-up-and-running/605).
+This is a working patched 4.12-rc3 kernel with [Mali r17p0 Kernel drivers](http://malideveloper.arm.com/resources/drivers/open-source-mali-midgard-gpu-kernel-drivers/), using the [torvalds branch](https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/) as a basis. This also integrate patches from Willy Tarreau, making possible to get better performances from the board. [More informations in this thread](https://forum.mqmaker.com/t/miqi-based-build-farm-finally-up-and-running/605).
 
 Currently this kernel has been tested sucessfully with the [Firefly's Mali User-space r12p0 drivers for fbdev and wayland](http://malideveloper.arm.com/resources/drivers/arm-mali-midgard-gpu-user-space-drivers/#mali-user-space-driver-r12p0-mali-t760-gnulinux), using the [OpenGL ES 3.1 and 3.2 samples of the Mali OpenGL ES SDK](http://malideveloper.arm.com/resources/sdks/opengl-es-sdk-for-linux/). Pure DRM OpenGL was also tested successfully with these drivers, using [this patched gl2mark](https://github.com/Miouyouyou/glmark2).
 
@@ -84,7 +84,7 @@ export KERNEL_PATCHES="
 0011-arm-dts-Adding-and-enabling-VPU-services-addresses-f.patch
 0012-Export-rockchip_pmu_set_idle_request-for-out-of-tree.patch
 0013-clk-rockchip-rk3288-prefer-vdpu-for-vcodec-clock-sou.patch
-0014-First-tinkerboard-Wifi-driver-addition-tentative.patch
+0014-Second-tinkerboard-Wifi-driver-addition-tentative.patch
 0100-First-Mali-integration-test-for-ASUS-Tinkerboards.patch
 "
 
@@ -113,6 +113,14 @@ function download_and_apply_patches {
 	download_patches $base_url $patches
 	git apply $patches
 	rm $patches
+}
+
+function copy_and_apply_patches {
+  patch_base_dir=$1
+  patches=${@:2}
+  cp $patch_base_dir/$patches ./
+  git apply $patches
+  rm $patches
 }
 
 # Get the kernel
@@ -154,8 +162,14 @@ if [ ! -e ".is_patched" ]; then
   rm -r TX011-SW-99002-$MALI_VERSION TX011-SW-99002-$MALI_VERSION.tgz
   
   # Download and apply the various kernel and Mali kernel-space driver patches
-  download_and_apply_patches $KERNEL_PATCHES_FOLDER_URL $KERNEL_PATCHES
-  download_and_apply_patches $MALI_PATCHES_FOLDER $MALI_PATCHES
+  if [ ! -d "../patches" ]; then
+    download_and_apply_patches $KERNEL_PATCHES_FOLDER_URL $KERNEL_PATCHES
+    download_and_apply_patches $MALI_PATCHES_FOLDER $MALI_PATCHES
+  else
+    copy_and_apply_patches ../patches/kernel/$KERNEL_SERIES $KERNEL_PATCHES
+    copy_and_apply_patches ../patches/Mali/$MALI_VERSION $MALI_PATCHES
+  fi
+
 
   # Cleanup, get the configuration file and mark the tree as patched
   git add . &&
