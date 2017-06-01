@@ -140,18 +140,22 @@ fi
 
 make $MAKE_CONFIG
 make $DTB_FILES zImage modules -j5
-exit 0
 
-# Kernel compiled
-# This will just copy the kernel files and libraries in /tmp
-# This part is only useful if you're cross-compiling the kernel, of course
-export INSTALL_MOD_PATH=/tmp/MyyQi
-export INSTALL_PATH=/tmp/MyyQi/boot
-export INSTALL_HDR_PATH=/tmp/MyyQi/usr
-mkdir -p $INSTALL_MOD_PATH $INSTALL_PATH $INSTALL_HDR_PATH
-make modules_install &&
-make install &&
-make INSTALL_HDR_PATH=$INSTALL_HDR_PATH headers_install && # This command IGNORES predefined variables
-cp arch/arm/boot/zImage $INSTALL_PATH &&
-cp arch/arm/boot/dts/*.dtb $INSTALL_PATH
+if [ -z ${MYY_GIT_RELEASE+x} ]; then
+	exit 0
+else
+	# Kernel compiled
+	# This will just copy the kernel files and libraries in /tmp
+	# This part is only useful if you're cross-compiling the kernel, of course
+	export INSTALL_MOD_PATH=/tmp/MyyQi
+	export INSTALL_PATH=/tmp/MyyQi/boot
+	export INSTALL_HDR_PATH=/tmp/MyyQi/usr
+	mkdir -p $INSTALL_MOD_PATH $INSTALL_PATH $INSTALL_HDR_PATH
+	make modules_install &&
+	make install &&
+	make INSTALL_HDR_PATH=$INSTALL_HDR_PATH headers_install && # This command IGNORES predefined variables
+	cp arch/arm/boot/zImage $INSTALL_PATH &&
+	cp arch/arm/boot/dts/*.dtb $INSTALL_PATH
+fi
+
 
