@@ -10,7 +10,6 @@ kernel/drivers/gpu/drm/panel/panel-sitronix-st7789v.ko:
 kernel/drivers/gpu/drm/bridge/synopsys/dw-hdmi-i2s-audio.ko:
 kernel/drivers/gpu/drm/bridge/lvds-encoder.ko:
 kernel/drivers/gpu/drm/bridge/sil-sii8620.ko:
-kernel/drivers/gpu/arm/midgard/mali_kbase.ko:
 kernel/drivers/misc/eeprom/eeprom_93cx6.ko:
 kernel/drivers/net/ppp/pppox.ko:
 kernel/drivers/net/ppp/pppoe.ko: kernel/drivers/net/ppp/pppox.ko

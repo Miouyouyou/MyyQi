@@ -54,7 +54,7 @@ export KERNEL_PATCHES="
 0011-arm-dts-Adding-and-enabling-VPU-services-addresses-f.patch
 0012-Export-rockchip_pmu_set_idle_request-for-out-of-tree.patch
 0013-clk-rockchip-rk3288-prefer-vdpu-for-vcodec-clock-sou.patch
-0014-First-tinkerboard-Wifi-driver-addition-tentative.patch
+0014-Second-tinkerboard-Wifi-driver-addition-tentative.patch
 0100-First-Mali-integration-test-for-ASUS-Tinkerboards.patch
 "
 
@@ -83,6 +83,14 @@ function download_and_apply_patches {
 	download_patches $base_url $patches
 	git apply $patches
 	rm $patches
+}
+
+function copy_and_apply_patches {
+  patch_base_dir=$1
+  patches=${@:2}
+  cp $patch_base_dir/$patches ./
+  git apply $patches
+  rm $patches
 }
 
 # Get the kernel
@@ -124,8 +132,14 @@ if [ ! -e ".is_patched" ]; then
   rm -r TX011-SW-99002-$MALI_VERSION TX011-SW-99002-$MALI_VERSION.tgz
   
   # Download and apply the various kernel and Mali kernel-space driver patches
-  download_and_apply_patches $KERNEL_PATCHES_FOLDER_URL $KERNEL_PATCHES
-  download_and_apply_patches $MALI_PATCHES_FOLDER $MALI_PATCHES
+  if [ ! -d "../patches" ]; then
+    download_and_apply_patches $KERNEL_PATCHES_FOLDER_URL $KERNEL_PATCHES
+    download_and_apply_patches $MALI_PATCHES_FOLDER $MALI_PATCHES
+  else
+    copy_and_apply_patches ../patches/kernel/$KERNEL_SERIES $KERNEL_PATCHES
+    copy_and_apply_patches ../patches/Mali/$MALI_VERSION $MALI_PATCHES
+  fi
+
 
   # Cleanup, get the configuration file and mark the tree as patched
   git add . &&
