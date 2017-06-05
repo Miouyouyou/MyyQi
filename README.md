@@ -18,7 +18,7 @@ If you already have a Debian system, you'll just have to add the [beta.armbian.c
 About
 -----
 
-This is a working patched 4.12-rc3 kernel with [Mali r17p0 Kernel drivers](http://malideveloper.arm.com/resources/drivers/open-source-mali-midgard-gpu-kernel-drivers/), using the [torvalds branch](https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/) as a basis. This also integrate patches from Willy Tarreau, making possible to get better performances from the board. [More informations in this thread](https://forum.mqmaker.com/t/miqi-based-build-farm-finally-up-and-running/605).
+This is a working patched 4.12-rc4 kernel with [Mali r17p0 Kernel drivers](http://malideveloper.arm.com/resources/drivers/open-source-mali-midgard-gpu-kernel-drivers/), using the [torvalds branch](https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/) as a basis. This also integrate patches from Willy Tarreau, making possible to get better performances from the board. [More informations in this thread](https://forum.mqmaker.com/t/miqi-based-build-farm-finally-up-and-running/605).
 
 Currently this kernel has been tested sucessfully with the [Firefly's Mali User-space r12p0 drivers for fbdev and wayland](http://malideveloper.arm.com/resources/drivers/arm-mali-midgard-gpu-user-space-drivers/#mali-user-space-driver-r12p0-mali-t760-gnulinux), using the [OpenGL ES 3.1 and 3.2 samples of the Mali OpenGL ES SDK](http://malideveloper.arm.com/resources/sdks/opengl-es-sdk-for-linux/). Pure DRM OpenGL was also tested successfully with these drivers, using [this patched gl2mark](https://github.com/Miouyouyou/glmark2).
 
@@ -42,6 +42,7 @@ rk3288-firefly-beta.dtb
 rk3288-firefly-reload.dtb
 rk3288-firefly.dtb
 rk3288-tinker.dtb
+rk3288-miniarm.dtb
 rk3288-miqi.dtb
 rk3288-popmetal.dtb
 rk3288-r89.dtb
@@ -56,15 +57,15 @@ rk3288-veyron-speedy.dtb
 "
 
 export KERNEL_SERIES=v4.12
-export KERNEL_BRANCH=v4.12-rc3
-export KERNEL_VERSION=4.12.0-rc3
+export KERNEL_BRANCH=v4.12-rc4
+export KERNEL_VERSION=4.12.0-rc4
 export MYY_VERSION=-The-Twelve-MyyQi+
 export MALI_VERSION=r17p0-01rel0
 export MALI_BASE_URL=https://developer.arm.com/-/media/Files/downloads/mali-drivers/kernel/mali-midgard-gpu
 
 export GITHUB_REPO=Miouyouyou/MyyQi
 export GIT_BRANCH=master
-export GIT_TAG=v4.12-rc3
+export GIT_TAG=v4.12-rc4
 
 export BASE_FILES_URL=https://raw.githubusercontent.com
 export PATCHES_FOLDER_URL=$BASE_FILES_URL/$GITHUB_REPO/$GIT_TAG/patches
@@ -84,8 +85,11 @@ export KERNEL_PATCHES="
 0011-arm-dts-Adding-and-enabling-VPU-services-addresses-f.patch
 0012-Export-rockchip_pmu_set_idle_request-for-out-of-tree.patch
 0013-clk-rockchip-rk3288-prefer-vdpu-for-vcodec-clock-sou.patch
-0014-Second-tinkerboard-Wifi-driver-addition-tentative.patch
+0014-ARMbian-RK3288-DTSI-changes.patch
+0015-Enabling-Tinkerboard-s-Wifi-Third-tentative.patch
+0016-Added-support-for-Tinkerboard-s-SPI-interface.patch
 0100-First-Mali-integration-test-for-ASUS-Tinkerboards.patch
+0200-The-Tinkerboard-DTS-file-maintained-by-TonyMac32-and.patch
 "
 
 export MALI_PATCHES="
@@ -116,11 +120,16 @@ function download_and_apply_patches {
 }
 
 function copy_and_apply_patches {
-  patch_base_dir=$1
-  patches=${@:2}
-  cp $patch_base_dir/$patches ./
-  git apply $patches
-  rm $patches
+	patch_base_dir=$1
+	patches=${@:2}
+	
+	apply_dir=$PWD
+	cd $patch_base_dir
+	cp $patches $apply_dir || 
+	{ echo "Could not copy $patch"; exit 1; }
+	cd $apply_dir
+	git apply $patches
+	rm $patches
 }
 
 # Get the kernel
@@ -185,6 +194,24 @@ fi
 
 make $MAKE_CONFIG
 make $DTB_FILES zImage modules -j5
+
+if [ -z ${MYY_GIT_RELEASE+x} ]; then
+	exit 0
+else
+	# Kernel compiled
+	# This will just copy the kernel files and libraries in /tmp
+	# This part is only useful if you're cross-compiling the kernel, of course
+	export INSTALL_MOD_PATH=/tmp/MyyQi
+	export INSTALL_PATH=/tmp/MyyQi/boot
+	export INSTALL_HDR_PATH=/tmp/MyyQi/usr
+	mkdir -p $INSTALL_MOD_PATH $INSTALL_PATH $INSTALL_HDR_PATH
+	make modules_install &&
+	make install &&
+	make INSTALL_HDR_PATH=$INSTALL_HDR_PATH headers_install && # This command IGNORES predefined variables
+	cp arch/arm/boot/zImage $INSTALL_PATH &&
+	cp arch/arm/boot/dts/*.dtb $INSTALL_PATH
+fi
+
 ```
 
 This procedure was stored in the **[GetPatchAndCompileKernel.sh](./GetPatchAndCompileKernel.sh)** file and can be run like this :
