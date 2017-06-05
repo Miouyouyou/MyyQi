@@ -1,19 +1,11 @@
 Tipping
 -------
 
+I accept ＼（・ヮ・）／ all kinds of money !
+
 [![Pledgie !](https://pledgie.com/campaigns/32702.png)](https://pledgie.com/campaigns/32702)
 [![Tip with Altcoins](https://raw.githubusercontent.com/Miouyouyou/Shapeshift-Tip-button/9e13666e9d0ecc68982fdfdf3625cd24dd2fb789/Tip-with-altcoin.png)](https://shapeshift.io/shifty.html?destination=16zwQUkG29D49G6C7pzch18HjfJqMXFNrW&output=BTC)
-
-Debian packages for release versions
-------------------------------------
-
-[Debian packages containing releases versions of kernels patched the same way are available in Armbian repositories](https://www.armbian.com/kernel/), thanks to [Armbian](https://www.armbian.com/)'s team. Note that Armbian also provides [Debian installation scripts](https://docs.armbian.com/User-Guide_Getting-Started/) and [cross-building scripts (Building ARM Debian images using Intel/AMD machines)](https://docs.armbian.com/Developer-Guide_Build-Preparation/).
-
-If you already have a Debian system, you'll just have to add the [beta.armbian.com](https://beta.armbian.com) Debian repository and do :
-
-    apt install linux-image-dev-rockchip linux-headers-dev-rockchip linux-dtb-dev-miqi
-
-`linux-dtb-dev-miqi` being useful if you're installing this kernel on a [MiQi](https://mqmaker.com/miqi_retailers/) board.
+**BTC: 16zwQUkG29D49G6C7pzch18HjfJqMXFNrW**
 
 About
 -----
@@ -228,6 +220,17 @@ Note that if you have access to U-boot through a serial console AND your MiQi is
 ```
 ums 0 mmc 1
 ```
+
+Debian packages for release versions
+------------------------------------
+
+[Debian packages containing releases versions of kernels patched the same way are available in Armbian repositories](https://www.armbian.com/kernel/), thanks to [Armbian](https://www.armbian.com/)'s team. Note that Armbian also provides [Debian installation scripts](https://docs.armbian.com/User-Guide_Getting-Started/) and [cross-building scripts (Building ARM Debian images using Intel/AMD machines)](https://docs.armbian.com/Developer-Guide_Build-Preparation/).
+
+If you already have a Debian system, you'll just have to add the [beta.armbian.com](https://beta.armbian.com) Debian repository and do :
+
+    apt install linux-image-dev-rockchip linux-headers-dev-rockchip linux-dtb-dev-miqi
+
+`linux-dtb-dev-miqi` being useful if you're installing this kernel on a [MiQi](https://mqmaker.com/miqi_retailers/) board.
 
 TODO
 ----
