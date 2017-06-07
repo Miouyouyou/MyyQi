@@ -61,6 +61,7 @@ export KERNEL_PATCHES="
 0016-Added-support-for-Tinkerboard-s-SPI-interface.patch
 0100-First-Mali-integration-test-for-ASUS-Tinkerboards.patch
 0200-The-Tinkerboard-DTS-file-maintained-by-TonyMac32-and.patch
+0300-Adding-Mali-Midgard-and-VCodec-support-to-Firefly-RK.patch
 "
 
 export MALI_PATCHES="
