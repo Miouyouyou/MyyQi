@@ -130,7 +130,6 @@ kernel/drivers/devfreq/governor_simpleondemand.ko
 kernel/drivers/devfreq/governor_userspace.ko
 kernel/drivers/dma/pl330.ko
 kernel/drivers/gpio/gpio-generic.ko
-kernel/drivers/gpu/arm/midgard/mali_kbase.ko
 kernel/drivers/gpu/drm/drm_kms_helper.ko
 kernel/drivers/gpu/drm/drm.ko
 kernel/drivers/gpu/drm/bridge/synopsys/dw-hdmi.ko

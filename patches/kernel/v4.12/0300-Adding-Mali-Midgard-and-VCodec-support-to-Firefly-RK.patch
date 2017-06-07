@@ -1,0 +1,36 @@
+From 372fce03c088e5ca10e0b961472771963144e685 Mon Sep 17 00:00:00 2001
+From: Myy <myy@miouyouyou.fr>
+Date: Wed, 7 Jun 2017 21:48:40 +0000
+Subject: [PATCH] Adding Mali Midgard and VCodec support to Firefly RK3288 DTS
+
+This should help Firefly RK3288 owners using mainline kernels !
+
+Signed-off-by: Myy <myy@miouyouyou.fr>
+---
+ arch/arm/boot/dts/rk3288-firefly.dtsi | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
+
+diff --git a/arch/arm/boot/dts/rk3288-firefly.dtsi b/arch/arm/boot/dts/rk3288-firefly.dtsi
+index 10793ac..b714f58 100644
+--- a/arch/arm/boot/dts/rk3288-firefly.dtsi
++++ b/arch/arm/boot/dts/rk3288-firefly.dtsi
+@@ -594,3 +594,16 @@
+ &wdt {
+ 	status = "okay";
+ };
++
++&gpu {
++  mali-supply = <&vdd_gpu>;
++  status = "okay";
++};
++
++&hevc_service {
++	status = "okay";
++};
++
++&vpu_service {
++	status = "okay";
++};
+-- 
+2.10.2
+

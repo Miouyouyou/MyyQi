@@ -22,6 +22,7 @@ The kernel was compiled using the following procedure :
 ```bash
 export ARCH=arm
 export CROSS_COMPILE=armv7a-hardfloat-linux-gnueabi-
+
 if [ -z ${MAKE_CONFIG+x} ]; then
   export MAKE_CONFIG=oldconfig
 fi
@@ -187,15 +188,13 @@ fi
 make $MAKE_CONFIG
 make $DTB_FILES zImage modules -j5
 
-if [ -z ${MYY_GIT_RELEASE+x} ]; then
-	exit 0
-else
+if [ -z ${DONT_INSTALL_IN_TMP+x} ]; then
 	# Kernel compiled
 	# This will just copy the kernel files and libraries in /tmp
 	# This part is only useful if you're cross-compiling the kernel, of course
 	export INSTALL_MOD_PATH=/tmp/MyyQi
 	export INSTALL_PATH=/tmp/MyyQi/boot
-	export INSTALL_HDR_PATH=/tmp/MyyQi/usr
+	export INSTALL_HDR_PATH=/tmp/usr
 	mkdir -p $INSTALL_MOD_PATH $INSTALL_PATH $INSTALL_HDR_PATH
 	make modules_install &&
 	make install &&

@@ -26,6 +26,10 @@ alias of:N*T*Clvds-encoder lvds_encoder
 alias of:N*T*Csil,sii8620C* sil_sii8620
 alias of:N*T*Csil,sii8620 sil_sii8620
 alias i2c:sii8620 sil_sii8620
+alias of:N*T*Carm,mali-midgardC* mali_kbase
+alias of:N*T*Carm,mali-midgard mali_kbase
+alias of:N*T*Carm,malit6xxC* mali_kbase
+alias of:N*T*Carm,malit6xx mali_kbase
 alias net-pf-24 pppox
 alias net-pf-24-proto-0 pppoe
 alias platform:qca956x_wmac ath9k
