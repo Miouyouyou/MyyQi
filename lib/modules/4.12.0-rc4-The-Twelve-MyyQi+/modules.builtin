@@ -104,13 +104,6 @@ kernel/drivers/base/regmap/regmap-mmio.ko
 kernel/drivers/block/brd.ko
 kernel/drivers/block/loop.ko
 kernel/drivers/block/zram/zram.ko
-kernel/drivers/bluetooth/hci_uart.ko
-kernel/drivers/bluetooth/btusb.ko
-kernel/drivers/bluetooth/btsdio.ko
-kernel/drivers/bluetooth/btintel.ko
-kernel/drivers/bluetooth/btbcm.ko
-kernel/drivers/bluetooth/btrtl.ko
-kernel/drivers/bluetooth/btqca.ko
 kernel/drivers/cdrom/cdrom.ko
 kernel/drivers/char/hw_random/rng-core.ko
 kernel/drivers/char/hw_random/tpm-rng.ko
@@ -274,6 +267,8 @@ kernel/drivers/net/wireless/ralink/rt2x00/rt2800usb.ko
 kernel/drivers/nvmem/nvmem_core.ko
 kernel/drivers/nvmem/nvmem_rockchip_efuse.ko
 kernel/drivers/of/of_mdio.ko
+kernel/drivers/of/of_pci.ko
+kernel/drivers/of/of_pci_irq.ko
 kernel/drivers/phy/phy-rockchip-usb.ko
 kernel/drivers/phy/phy-rockchip-emmc.ko
 kernel/drivers/phy/phy-rockchip-dp.ko
@@ -304,6 +299,8 @@ kernel/drivers/thermal/rockchip_thermal.ko
 kernel/drivers/tty/serial/serial_core.ko
 kernel/drivers/tty/serial/8250/8250.ko
 kernel/drivers/tty/serial/8250/8250_base.ko
+kernel/drivers/tty/serial/8250/8250_pci.ko
+kernel/drivers/tty/serial/8250/8250_exar.ko
 kernel/drivers/tty/serial/8250/8250_dw.ko
 kernel/drivers/tty/serial/8250/8250_of.ko
 kernel/drivers/usb/class/cdc-acm.ko
@@ -317,6 +314,7 @@ kernel/drivers/usb/gadget/function/usb_f_mass_storage.ko
 kernel/drivers/usb/gadget/function/usb_f_fs.ko
 kernel/drivers/usb/gadget/udc/udc-core.ko
 kernel/drivers/usb/host/ehci-hcd.ko
+kernel/drivers/usb/host/ehci-pci.ko
 kernel/drivers/usb/host/ehci-platform.ko
 kernel/drivers/usb/misc/ezusb.ko
 kernel/drivers/usb/mon/usbmon.ko

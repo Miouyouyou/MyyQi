@@ -32,12 +32,27 @@ kernel/drivers/net/wireless/marvell/mwifiex/mwifiex_usb.ko:
 kernel/drivers/net/wireless/mediatek/mt7601u/mt7601u.ko:
 kernel/drivers/net/wireless/realtek/rtl818x/rtl8187/rtl8187.ko: kernel/drivers/misc/eeprom/eeprom_93cx6.ko
 kernel/drivers/net/wireless/realtek/rtlwifi/rtlwifi.ko:
+kernel/drivers/net/wireless/realtek/rtlwifi/rtl_pci.ko: kernel/drivers/net/wireless/realtek/rtlwifi/rtlwifi.ko
 kernel/drivers/net/wireless/realtek/rtlwifi/rtl_usb.ko: kernel/drivers/net/wireless/realtek/rtlwifi/rtlwifi.ko
 kernel/drivers/net/wireless/realtek/rtlwifi/rtl8192c/rtl8192c-common.ko: kernel/drivers/net/wireless/realtek/rtlwifi/rtlwifi.ko
+kernel/drivers/net/wireless/realtek/rtlwifi/rtl8192ce/rtl8192ce.ko: kernel/drivers/net/wireless/realtek/rtlwifi/rtl_pci.ko kernel/drivers/net/wireless/realtek/rtlwifi/rtl8192c/rtl8192c-common.ko kernel/drivers/net/wireless/realtek/rtlwifi/rtlwifi.ko
 kernel/drivers/net/wireless/realtek/rtlwifi/rtl8192cu/rtl8192cu.ko: kernel/drivers/net/wireless/realtek/rtlwifi/rtl_usb.ko kernel/drivers/net/wireless/realtek/rtlwifi/rtl8192c/rtl8192c-common.ko kernel/drivers/net/wireless/realtek/rtlwifi/rtlwifi.ko
+kernel/drivers/net/wireless/realtek/rtlwifi/rtl8192se/rtl8192se.ko: kernel/drivers/net/wireless/realtek/rtlwifi/rtl_pci.ko kernel/drivers/net/wireless/realtek/rtlwifi/rtlwifi.ko
+kernel/drivers/net/wireless/realtek/rtlwifi/rtl8192de/rtl8192de.ko: kernel/drivers/net/wireless/realtek/rtlwifi/rtl_pci.ko kernel/drivers/net/wireless/realtek/rtlwifi/rtlwifi.ko
+kernel/drivers/net/wireless/realtek/rtlwifi/rtl8723ae/rtl8723ae.ko: kernel/drivers/net/wireless/realtek/rtlwifi/btcoexist/btcoexist.ko kernel/drivers/net/wireless/realtek/rtlwifi/rtl8723com/rtl8723-common.ko kernel/drivers/net/wireless/realtek/rtlwifi/rtl_pci.ko kernel/drivers/net/wireless/realtek/rtlwifi/rtlwifi.ko
+kernel/drivers/net/wireless/realtek/rtlwifi/rtl8723be/rtl8723be.ko: kernel/drivers/net/wireless/realtek/rtlwifi/btcoexist/btcoexist.ko kernel/drivers/net/wireless/realtek/rtlwifi/rtl8723com/rtl8723-common.ko kernel/drivers/net/wireless/realtek/rtlwifi/rtl_pci.ko kernel/drivers/net/wireless/realtek/rtlwifi/rtlwifi.ko
+kernel/drivers/net/wireless/realtek/rtlwifi/rtl8188ee/rtl8188ee.ko: kernel/drivers/net/wireless/realtek/rtlwifi/rtl_pci.ko kernel/drivers/net/wireless/realtek/rtlwifi/rtlwifi.ko
+kernel/drivers/net/wireless/realtek/rtlwifi/btcoexist/btcoexist.ko: kernel/drivers/net/wireless/realtek/rtlwifi/rtlwifi.ko
+kernel/drivers/net/wireless/realtek/rtlwifi/rtl8723com/rtl8723-common.ko: kernel/drivers/net/wireless/realtek/rtlwifi/rtlwifi.ko
+kernel/drivers/net/wireless/realtek/rtlwifi/rtl8821ae/rtl8821ae.ko: kernel/drivers/net/wireless/realtek/rtlwifi/btcoexist/btcoexist.ko kernel/drivers/net/wireless/realtek/rtlwifi/rtl_pci.ko kernel/drivers/net/wireless/realtek/rtlwifi/rtlwifi.ko
+kernel/drivers/net/wireless/realtek/rtlwifi/rtl8192ee/rtl8192ee.ko: kernel/drivers/net/wireless/realtek/rtlwifi/btcoexist/btcoexist.ko kernel/drivers/net/wireless/realtek/rtlwifi/rtl_pci.ko kernel/drivers/net/wireless/realtek/rtlwifi/rtlwifi.ko
 kernel/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu.ko:
 kernel/drivers/net/wireless/zydas/zd1211rw/zd1211rw.ko:
 kernel/drivers/net/wireless/zydas/zd1201.ko:
+kernel/drivers/usb/phy/phy-gpio-vbus-usb.ko:
+kernel/drivers/usb/host/xhci-hcd.ko:
+kernel/drivers/usb/host/xhci-pci.ko: kernel/drivers/usb/host/xhci-hcd.ko
+kernel/drivers/usb/host/xhci-plat-hcd.ko: kernel/drivers/usb/host/xhci-hcd.ko
 kernel/drivers/usb/misc/usblcd.ko:
 kernel/drivers/usb/gadget/function/usb_f_acm.ko: kernel/drivers/usb/gadget/function/u_serial.ko
 kernel/drivers/usb/gadget/function/u_serial.ko:
@@ -52,12 +67,19 @@ kernel/drivers/input/joystick/psxpad-spi.ko:
 kernel/drivers/i2c/i2c-stub.ko:
 kernel/drivers/md/dm-integrity.ko: kernel/crypto/async_tx/async_xor.ko kernel/crypto/async_tx/async_tx.ko
 kernel/drivers/bluetooth/hci_vhci.ko:
+kernel/drivers/bluetooth/hci_uart.ko: kernel/drivers/bluetooth/btbcm.ko kernel/drivers/bluetooth/btqca.ko kernel/drivers/bluetooth/btintel.ko
 kernel/drivers/bluetooth/bcm203x.ko:
-kernel/drivers/bluetooth/bpa10x.ko:
+kernel/drivers/bluetooth/bpa10x.ko: kernel/drivers/bluetooth/hci_uart.ko kernel/drivers/bluetooth/btbcm.ko kernel/drivers/bluetooth/btqca.ko kernel/drivers/bluetooth/btintel.ko
 kernel/drivers/bluetooth/bfusb.ko:
+kernel/drivers/bluetooth/btusb.ko: kernel/drivers/bluetooth/btrtl.ko kernel/drivers/bluetooth/btbcm.ko kernel/drivers/bluetooth/btintel.ko
+kernel/drivers/bluetooth/btsdio.ko:
+kernel/drivers/bluetooth/btintel.ko:
 kernel/drivers/bluetooth/ath3k.ko:
 kernel/drivers/bluetooth/btmrvl.ko:
 kernel/drivers/bluetooth/btmrvl_sdio.ko: kernel/drivers/bluetooth/btmrvl.ko
+kernel/drivers/bluetooth/btbcm.ko:
+kernel/drivers/bluetooth/btrtl.ko:
+kernel/drivers/bluetooth/btqca.ko:
 kernel/drivers/mmc/host/sdhci-cadence.ko:
 kernel/drivers/leds/uleds.ko:
 kernel/drivers/staging/rtl8723bs/r8723bs.ko:
