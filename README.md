@@ -58,7 +58,7 @@ export MALI_BASE_URL=https://developer.arm.com/-/media/Files/downloads/mali-driv
 
 export GITHUB_REPO=Miouyouyou/MyyQi
 export GIT_BRANCH=master
-export GIT_TAG=v4.12-rc4
+export GIT_TAG=v4.12-rc4-p3
 
 export BASE_FILES_URL=https://raw.githubusercontent.com
 export PATCHES_FOLDER_URL=$BASE_FILES_URL/$GITHUB_REPO/$GIT_TAG/patches
