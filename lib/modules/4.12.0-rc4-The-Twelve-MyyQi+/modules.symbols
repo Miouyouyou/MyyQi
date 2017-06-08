@@ -14,6 +14,7 @@ alias symbol:ath6kl_hif_rw_comp_handler ath6kl_core
 alias symbol:rtl_efuse_shadow_map_update rtlwifi
 alias symbol:rtl_init_rfkill rtlwifi
 alias symbol:ath_hw_setbssidmask ath
+alias symbol:btmrvl_enable_ps btmrvl
 alias symbol:ath9k_hw_reset_tsf ath9k_hw
 alias symbol:gserial_connect u_serial
 alias symbol:ath_dynack_node_init ath9k_hw
@@ -135,6 +136,7 @@ alias symbol:ump_dd_handle_create_from_secure_id ump
 alias symbol:ath9k_hw_set_txpowerlimit ath9k_hw
 alias symbol:rtl92c_download_fw rtl8192c_common
 alias symbol:eeprom_93cx6_write eeprom_93cx6
+alias symbol:btmrvl_check_evtpkt btmrvl
 alias symbol:ath9k_hw_gpio_free ath9k_hw
 alias symbol:ath9k_hw_init_global_settings ath9k_hw
 alias symbol:ath6kl_cfg80211_resume ath6kl_core
@@ -149,6 +151,7 @@ alias symbol:rtl92c_dm_rf_saving rtl8192c_common
 alias symbol:_rtl92c_phy_dbm_to_txpwr_idx rtl8192c_common
 alias symbol:ssb_bus_sdiobus_register ssb
 alias symbol:gs_free_req u_serial
+alias symbol:btmrvl_send_module_cfg_cmd btmrvl
 alias symbol:ath9k_hw_setup_statusring ath9k_hw
 alias symbol:rtl92c_phy_set_io rtl8192c_common
 alias symbol:ump_dd_handle_create_from_phys_blocks ump
@@ -175,6 +178,7 @@ alias symbol:ath9k_hw_process_rxdesc_edma ath9k_hw
 alias symbol:ath_is_mybeacon ath
 alias symbol:kbase_create_context mali_kbase
 alias symbol:bcma_chipco_regctl_maskset bcma
+alias symbol:btmrvl_interrupt btmrvl
 alias symbol:rtl_deinit_core rtlwifi
 alias symbol:kbase_va_alloc mali_kbase
 alias symbol:ath9k_cmn_process_rate ath9k_common
@@ -245,8 +249,10 @@ alias symbol:bcma_chipco_gpio_out bcma
 alias symbol:ar9003_mci_state ath9k_hw
 alias symbol:ath9k_cmn_rx_skb_postprocess ath9k_common
 alias symbol:bcma_chipco_get_alp_clock bcma
+alias symbol:btmrvl_remove_card btmrvl
 alias symbol:ath9k_hw_setuprxdesc ath9k_hw
 alias symbol:ssb_bus_resume ssb
+alias symbol:btmrvl_process_event btmrvl
 alias symbol:ath_is_world_regd ath
 alias symbol:ath9k_hw_btcoex_bt_stomp ath9k_hw
 alias symbol:ath_key_config ath
@@ -265,6 +271,7 @@ alias symbol:ath_dynack_sample_ack_ts ath9k_hw
 alias symbol:bcma_core_pll_ctl bcma
 alias symbol:ath9k_hw_phy_disable ath9k_hw
 alias symbol:rtl_btc_status_false rtlwifi
+alias symbol:btmrvl_enable_hs btmrvl
 alias symbol:_rtl92c_phy_fw_rf_serial_read rtl8192c_common
 alias symbol:ath9k_hw_enable_interrupts ath9k_hw
 alias symbol:ath_dynack_sample_tx_ts ath9k_hw
@@ -281,6 +288,7 @@ alias symbol:sha1_finup_arm sha1_arm
 alias symbol:ump_import_module_unregister ump
 alias symbol:ath9k_hw_putrxbuf ath9k_hw
 alias symbol:_rtl92c_phy_rf_serial_write rtl8192c_common
+alias symbol:btmrvl_pscan_window_reporting btmrvl
 alias symbol:ar9003_paprd_create_curve ath9k_hw
 alias symbol:rtlwifi_rate_mapping rtlwifi
 alias symbol:ath_dynack_reset ath9k_hw
@@ -295,6 +303,7 @@ alias symbol:rtl_rfreg_delay rtlwifi
 alias symbol:ssb_admatch_base ssb
 alias symbol:ath9k_hw_btcoex_set_weight ath9k_hw
 alias symbol:kbase_release_device mali_kbase
+alias symbol:btmrvl_send_hscfg_cmd btmrvl
 alias symbol:rtl_send_smps_action rtlwifi
 alias symbol:kbase_context_set_create_flags mali_kbase
 alias symbol:bcma_pmu_get_bus_clock bcma
@@ -325,6 +334,7 @@ alias symbol:ssb_device_is_enabled ssb
 alias symbol:ath_bus_type_strings ath
 alias symbol:ath9k_hw_btcoex_init_3wire ath9k_hw
 alias symbol:ath9k_hw_set_rx_bufsize ath9k_hw
+alias symbol:btmrvl_register_hdev btmrvl
 alias symbol:ath_rxbuf_alloc ath
 alias symbol:kbase_instr_hwcnt_request_dump mali_kbase
 alias symbol:ath9k_hw_reset_calvalid ath9k_hw
@@ -347,6 +357,7 @@ alias symbol:__async_tx_find_channel async_tx
 alias symbol:efuse_power_switch rtlwifi
 alias symbol:bcma_chipco_gpio_control bcma
 alias symbol:rtl_ps_disable_nic rtlwifi
+alias symbol:btmrvl_add_card btmrvl
 alias symbol:rtl_usb_disconnect rtl_usb
 alias symbol:ath_printk ath
 alias symbol:rtl92c_phy_sw_chnl_callback rtl8192c_common

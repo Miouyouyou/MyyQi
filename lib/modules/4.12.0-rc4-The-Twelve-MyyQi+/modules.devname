@@ -1,1 +1,2 @@
 # Device nodes to trigger on-demand module loading.
+hci_vhci vhci c10:137

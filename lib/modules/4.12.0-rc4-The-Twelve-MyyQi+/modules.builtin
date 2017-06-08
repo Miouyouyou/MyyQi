@@ -104,16 +104,13 @@ kernel/drivers/base/regmap/regmap-mmio.ko
 kernel/drivers/block/brd.ko
 kernel/drivers/block/loop.ko
 kernel/drivers/block/zram/zram.ko
-kernel/drivers/bluetooth/hci_vhci.ko
 kernel/drivers/bluetooth/hci_uart.ko
-kernel/drivers/bluetooth/bfusb.ko
 kernel/drivers/bluetooth/btusb.ko
 kernel/drivers/bluetooth/btsdio.ko
 kernel/drivers/bluetooth/btintel.ko
-kernel/drivers/bluetooth/btmrvl.ko
-kernel/drivers/bluetooth/btmrvl_sdio.ko
 kernel/drivers/bluetooth/btbcm.ko
 kernel/drivers/bluetooth/btrtl.ko
+kernel/drivers/bluetooth/btqca.ko
 kernel/drivers/cdrom/cdrom.ko
 kernel/drivers/char/hw_random/rng-core.ko
 kernel/drivers/char/hw_random/tpm-rng.ko

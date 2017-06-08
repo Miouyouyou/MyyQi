@@ -51,6 +51,13 @@ kernel/drivers/usb/gadget/legacy/g_hid.ko:
 kernel/drivers/input/joystick/psxpad-spi.ko:
 kernel/drivers/i2c/i2c-stub.ko:
 kernel/drivers/md/dm-integrity.ko: kernel/crypto/async_tx/async_xor.ko kernel/crypto/async_tx/async_tx.ko
+kernel/drivers/bluetooth/hci_vhci.ko:
+kernel/drivers/bluetooth/bcm203x.ko:
+kernel/drivers/bluetooth/bpa10x.ko:
+kernel/drivers/bluetooth/bfusb.ko:
+kernel/drivers/bluetooth/ath3k.ko:
+kernel/drivers/bluetooth/btmrvl.ko:
+kernel/drivers/bluetooth/btmrvl_sdio.ko: kernel/drivers/bluetooth/btmrvl.ko
 kernel/drivers/mmc/host/sdhci-cadence.ko:
 kernel/drivers/leds/uleds.ko:
 kernel/drivers/staging/rtl8723bs/r8723bs.ko:
@@ -58,3 +65,4 @@ kernel/drivers/staging/rtl8712/r8712u.ko:
 kernel/drivers/staging/rtl8188eu/r8188eu.ko:
 kernel/drivers/ssb/ssb.ko:
 kernel/drivers/bcma/bcma.ko:
+kernel/net/bluetooth/bnep/bnep.ko:
