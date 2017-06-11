@@ -1,0 +1,58 @@
+From 35d2ba186765db64693d297e51c14e68457af4ab Mon Sep 17 00:00:00 2001
+From: Myy <myy@miouyouyou.fr>
+Date: Sun, 11 Jun 2017 21:53:03 +0000
+Subject: [PATCH] Reboot hack for Tinkerboards
+
+This *hack* tries to resolve the reboot bug that some Tinkerboard
+owners have. The thing is, this might impact *every* Rockchip board.
+
+If this works for Tinkerboard, I'll remake the patch and cover the
+hack sections with a #ifdef CONFIG_TINKERBOARD_POWER_HACK or something
+similar.
+If it doesn't, I'll trash the patch.
+
+Signed-off-by: Myy <myy@miouyouyou.fr>
+---
+ drivers/mmc/host/dw_mmc-rockchip.c | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
+
+diff --git a/drivers/mmc/host/dw_mmc-rockchip.c b/drivers/mmc/host/dw_mmc-rockchip.c
+index 372fb6e..8775ff2 100644
+--- a/drivers/mmc/host/dw_mmc-rockchip.c
++++ b/drivers/mmc/host/dw_mmc-rockchip.c
+@@ -12,6 +12,7 @@
+ #include <linux/clk.h>
+ #include <linux/mmc/host.h>
+ #include <linux/of_address.h>
++#include <linux/regulator/consumer.h>
+ #include <linux/mmc/slot-gpio.h>
+ #include <linux/pm_runtime.h>
+ #include <linux/slab.h>
+@@ -370,9 +371,24 @@ static const struct dev_pm_ops dw_mci_rockchip_dev_pm_ops = {
+ 			   NULL)
+ };
+ 
++/* A weird reboot hack
++ * Discusse here :
++ * https://github.com/Miouyouyou/MyyQi/issues/8
++ */
++static void dw_mci_rockchip_platfm_shutdown(struct platform_device *pdev)
++{
++	struct dw_mci *host = platform_get_drvdata(pdev);
++	struct mmc_host *mmc = host->cur_slot->mmc;
++
++	if (!IS_ERR(mmc->supply.vqmmc))
++		regulator_set_voltage(mmc->supply.vqmmc, 3000000, 3300000);
++}
++
++
+ static struct platform_driver dw_mci_rockchip_pltfm_driver = {
+ 	.probe		= dw_mci_rockchip_probe,
+ 	.remove		= dw_mci_rockchip_remove,
++	.shutdown = dw_mci_rockchip_platfm_shutdown,
+ 	.driver		= {
+ 		.name		= "dwmmc_rockchip",
+ 		.of_match_table	= dw_mci_rockchip_match,
+-- 
+2.10.2
+
