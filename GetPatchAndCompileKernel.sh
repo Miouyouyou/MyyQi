@@ -28,7 +28,7 @@ rk3288-veyron-speedy.dtb
 "
 
 export KERNEL_SERIES=v4.12
-export KERNEL_BRANCH=v4.12-rc4
+export KERNEL_BRANCH=v4.12-rc5
 export KERNEL_VERSION=4.12.0-rc4
 export MYY_VERSION=-The-Twelve-MyyQi+
 export MALI_VERSION=r17p0-01rel0
@@ -59,7 +59,7 @@ export KERNEL_PATCHES="
 0014-ARMbian-RK3288-DTSI-changes.patch
 0015-Enabling-Tinkerboard-s-Wifi-Third-tentative.patch
 0016-Added-support-for-Tinkerboard-s-SPI-interface.patch
-0017-Reboot-hack-for-Tinkerboards.patch
+0017-Testing-DTS-changes-in-order-to-resolve-bug-8.patch
 0100-First-Mali-integration-test-for-ASUS-Tinkerboards.patch
 0200-The-Tinkerboard-DTS-file-maintained-by-TonyMac32-and.patch
 0300-Adding-Mali-Midgard-and-VCodec-support-to-Firefly-RK.patch

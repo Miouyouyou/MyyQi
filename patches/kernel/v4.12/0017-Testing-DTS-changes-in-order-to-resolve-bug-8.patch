@@ -1,0 +1,35 @@
+From 5ecffbf8c0201b55580664a598342dc4cf69aabb Mon Sep 17 00:00:00 2001
+From: Myy <myy@miouyouyou.fr>
+Date: Wed, 14 Jun 2017 15:00:02 +0000
+Subject: [PATCH] Testing DTS changes in order to resolve bug #8
+
+See here for more informations :
+https://github.com/Miouyouyou/MyyQi/issues/8
+
+It looks like this won't change anything however...
+
+Signed-off-by: Myy <myy@miouyouyou.fr>
+---
+ arch/arm/boot/dts/rk3288-tinker.dts | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/arch/arm/boot/dts/rk3288-tinker.dts b/arch/arm/boot/dts/rk3288-tinker.dts
+index 843d704..1e8dd20 100644
+--- a/arch/arm/boot/dts/rk3288-tinker.dts
++++ b/arch/arm/boot/dts/rk3288-tinker.dts
+@@ -558,10 +558,10 @@
+ 	bus-width = <4>;
+ 	cap-mmc-highspeed;
+ 	cap-sd-highspeed;
+-	sd-uhs-sdr12;
++	/*sd-uhs-sdr12;
+ 	sd-uhs-sdr25;
+ 	sd-uhs-sdr50;
+-	sd-uhs-sdr104;
++	sd-uhs-sdr104;*/
+ 	card-detect-delay = <200>;
+ 	disable-wp;			/* wp not hooked up */
+ 	num-slots = <1>;
+-- 
+2.10.2
+
