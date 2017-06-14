@@ -2,3 +2,5 @@
 *.cmd
 *.*swp
 linux/
+boot/vmlinuz*
+
