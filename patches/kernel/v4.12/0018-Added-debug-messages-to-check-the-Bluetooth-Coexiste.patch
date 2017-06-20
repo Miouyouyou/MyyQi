@@ -1,0 +1,62 @@
+From 1d8c31fe7d7f3fcf9506b325c140d96213c27897 Mon Sep 17 00:00:00 2001
+From: Myy <myy@miouyouyou.fr>
+Date: Tue, 20 Jun 2017 03:58:28 +0000
+Subject: [PATCH] Added debug messages to check the Bluetooth Coexistence
+ initialisation
+
+For the RTL8723BS driver.
+
+Signed-off-by: Myy <myy@miouyouyou.fr>
+---
+ drivers/staging/rtl8723bs/hal/hal_btcoex.c        | 4 ++++
+ drivers/staging/rtl8723bs/hal/rtl8723b_hal_init.c | 5 +++--
+ drivers/staging/rtl8723bs/os_dep/sdio_intf.c      | 2 +-
+ 3 files changed, 8 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/staging/rtl8723bs/hal/hal_btcoex.c b/drivers/staging/rtl8723bs/hal/hal_btcoex.c
+index cc7e090..96b6b1a 100644
+--- a/drivers/staging/rtl8723bs/hal/hal_btcoex.c
++++ b/drivers/staging/rtl8723bs/hal/hal_btcoex.c
+@@ -1048,6 +1048,10 @@ void EXhalbtcoutsrc_InitHwConfig(PBTC_COEXIST pBtCoexist, u8 bWifiOnly)
+ 
+ 	pBtCoexist->statistics.cntInitHwConfig++;
+ 
++	DBG_871X_LEVEL(_drv_always_, 
++		"( Myy Debug ) btdmAntNum == %d\n",
++		pBtCoexist->boardInfo.btdmAntNum
++	);
+ 	if (pBtCoexist->boardInfo.btdmAntNum == 2)
+ 		EXhalbtc8723b2ant_InitHwConfig(pBtCoexist, bWifiOnly);
+ 	else if (pBtCoexist->boardInfo.btdmAntNum == 1)
+diff --git a/drivers/staging/rtl8723bs/hal/rtl8723b_hal_init.c b/drivers/staging/rtl8723bs/hal/rtl8723b_hal_init.c
+index 163537f..13ebe0d 100644
+--- a/drivers/staging/rtl8723bs/hal/rtl8723b_hal_init.c
++++ b/drivers/staging/rtl8723bs/hal/rtl8723b_hal_init.c
+@@ -2708,8 +2708,9 @@ void Hal_EfuseParseBTCoexistInfo_8723B(
+ 	if (pHalData->EEPROMBluetoothAntNum == Ant_x1)
+ 		rtw_btcoex_SetSingleAntPath(padapter, pHalData->ant_path);
+ 
+-	DBG_8192C(
+-		"%s: %s BT-coex, ant_num =%d\n",
++	printk(
++		KERN_ERR 
++		"( Myy Error Debug ) %s: %s BT-coex, ant_num =%d\n",
+ 		__func__,
+ 		pHalData->EEPROMBluetoothCoexist == true ? "Enable" : "Disable",
+ 		pHalData->EEPROMBluetoothAntNum == Ant_x2 ? 2 : 1
+diff --git a/drivers/staging/rtl8723bs/os_dep/sdio_intf.c b/drivers/staging/rtl8723bs/os_dep/sdio_intf.c
+index d2fb489..9fc5fb1 100644
+--- a/drivers/staging/rtl8723bs/os_dep/sdio_intf.c
++++ b/drivers/staging/rtl8723bs/os_dep/sdio_intf.c
+@@ -651,7 +651,7 @@ static int __init rtw_drv_entry(void)
+ 	DBG_871X_LEVEL(_drv_always_, "module init start\n");
+ 	dump_drv_version(RTW_DBGDUMP);
+ #ifdef BTCOEXVERSION
+-	DBG_871X_LEVEL(_drv_always_, "rtl8723bs BT-Coex version = %s\n", BTCOEXVERSION);
++	DBG_871X_LEVEL(_drv_always_, "( Myy : The driver is still not initialized !) rtl8723bs BT-Coex version = %s\n", BTCOEXVERSION);
+ #endif /*  BTCOEXVERSION */
+ 
+ 	sdio_drvpriv.drv_registered = true;
+-- 
+2.10.2
+
