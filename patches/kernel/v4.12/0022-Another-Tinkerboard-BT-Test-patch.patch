@@ -1,0 +1,71 @@
+From a878a31d684d0dac834791412f235b90de916160 Mon Sep 17 00:00:00 2001
+From: Myy <myy@miouyouyou.fr>
+Date: Fri, 23 Jun 2017 17:46:35 +0000
+Subject: [PATCH] Another Tinkerboard BT Test patch
+
+This time, we'll try to let the rfkill-bt do its thing when asked
+to control the Bluetooth power.
+
+Will it be able to do its job correctly ?
+
+You'll know it in the next episode of : Tinker Bored
+
+Signed-off-by: Myy <myy@miouyouyou.fr>
+---
+ net/rfkill/rfkill-bt.c | 17 +++++++++++------
+ 1 file changed, 11 insertions(+), 6 deletions(-)
+
+diff --git a/net/rfkill/rfkill-bt.c b/net/rfkill/rfkill-bt.c
+index e112f99..5919222 100644
+--- a/net/rfkill/rfkill-bt.c
++++ b/net/rfkill/rfkill-bt.c
+@@ -308,19 +308,25 @@ int rfkill_get_bt_power_state(int *power, bool *toggle)
+ static int rfkill_rk_set_power(void *data, bool blocked)
+ {
+ 
++	struct rfkill_rk_data *rfkill = data;
++	struct rfkill_rk_gpio *poweron = &rfkill->pdata->poweron_gpio;
++	struct rfkill_rk_gpio *reset = &rfkill->pdata->reset_gpio;
++	struct rfkill_rk_gpio* rts = &rfkill->pdata->rts_gpio;
++	struct pinctrl *pinctrl = rfkill->pdata->pinctrl;
++	
+ 	DBG("Enter %s\n", __func__);
+ 
+ 	DBG("Set blocked:%d\n", blocked);
+ 
+-	LOG(
++	/*LOG(
+ 		"%s: bt shouldn't control the power, it was enabled by wifi!\n",
+ 		__func__
+ 	);
+-	return 0;
++	return 0;*/
+ 
+ 
+-	/*
+-	if (false == blocked) { 
++	
++	if (!blocked) { 
+ 
+ 		rfkill_rk_sleep_bt(BT_WAKEUP); // ensure bt is wakeup
+ 
+@@ -369,7 +375,7 @@ static int rfkill_rk_set_power(void *data, bool blocked)
+ 
+ 	}
+ 
+-	return 0;*/
++	return 0;
+ }
+ 
+ static int rfkill_rk_pm_prepare(struct device *dev)
+@@ -719,7 +725,6 @@ static int rfkill_rk_remove(struct platform_device *pdev)
+ 	rfkill_unregister(rfkill->rfkill_dev);
+ 	rfkill_destroy(rfkill->rfkill_dev);
+ 
+-	
+ 	cancel_delayed_work_sync(&rfkill->bt_sleep_delay_work);
+ 
+ 	// free gpio
+-- 
+2.10.2
+
