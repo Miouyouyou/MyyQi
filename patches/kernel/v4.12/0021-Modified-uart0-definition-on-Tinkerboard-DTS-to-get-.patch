@@ -1,0 +1,27 @@
+From cd1162efbcaae7cbe275530d64ce1dbbe7a652e2 Mon Sep 17 00:00:00 2001
+From: Myy <myy@miouyouyou.fr>
+Date: Fri, 23 Jun 2017 13:52:52 +0000
+Subject: [PATCH] Modified uart0 definition on Tinkerboard DTS to get BT on
+ RTL8723BS
+
+Signed-off-by: Myy <myy@miouyouyou.fr>
+---
+ arch/arm/boot/dts/rk3288-tinker.dts | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/arch/arm/boot/dts/rk3288-tinker.dts b/arch/arm/boot/dts/rk3288-tinker.dts
+index e1ec7e1..a5ef5fe 100644
+--- a/arch/arm/boot/dts/rk3288-tinker.dts
++++ b/arch/arm/boot/dts/rk3288-tinker.dts
+@@ -593,6 +593,8 @@
+ };
+ 
+ &uart0 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&uart0_xfer>, <&uart0_cts>;
+ 	status = "okay";
+ };
+ 
+-- 
+2.10.2
+

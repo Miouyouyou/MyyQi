@@ -3,4 +3,4 @@
 *.*swp
 linux/
 boot/vmlinuz*
-
+boot/*.old
