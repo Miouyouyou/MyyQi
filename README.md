@@ -57,11 +57,10 @@ export MALI_VERSION=r17p0-01rel0
 export MALI_BASE_URL=https://developer.arm.com/-/media/Files/downloads/mali-drivers/kernel/mali-midgard-gpu
 
 export GITHUB_REPO=Miouyouyou/MyyQi
-export GIT_BRANCH=master
-export GIT_TAG=v4.12-rc6
+export GIT_BRANCH=Tinkering
 
 export BASE_FILES_URL=https://raw.githubusercontent.com
-export PATCHES_FOLDER_URL=$BASE_FILES_URL/$GITHUB_REPO/$GIT_TAG/patches
+export PATCHES_FOLDER_URL=$BASE_FILES_URL/$GITHUB_REPO/tree/$GIT_BRANCH/patches
 export KERNEL_PATCHES_FOLDER_URL=$PATCHES_FOLDER_URL/kernel/$KERNEL_SERIES
 export MALI_PATCHES_FOLDER=$PATCHES_FOLDER_URL/Mali/$MALI_VERSION
 
@@ -83,6 +82,8 @@ export KERNEL_PATCHES="
 0016-Added-support-for-Tinkerboard-s-SPI-interface.patch
 0017-Testing-DTS-changes-in-order-to-resolve-bug-8.patch
 0018-Added-debug-messages-to-check-the-Bluetooth-Coexiste.patch
+0019-Forward-port-of-the-Rockchip-GPIO-BT-RFKILL-system.patch
+0020-Tinkerboard-DTS-Added-GPIO-Bluetooth-RFKILL-subsyste.patch
 0100-First-Mali-integration-test-for-ASUS-Tinkerboards.patch
 0200-The-Tinkerboard-DTS-file-maintained-by-TonyMac32-and.patch
 0300-Adding-Mali-Midgard-and-VCodec-support-to-Firefly-RK.patch
@@ -191,7 +192,7 @@ fi
 make $MAKE_CONFIG
 make $DTB_FILES zImage modules -j5
 
-if [ -z ${DONT_INSTALL_IN_TMP+x} ]; then
+if [ $? = 0 ] && [ -z ${DONT_INSTALL_IN_TMP+x} ]; then
 	# Kernel compiled
 	# This will just copy the kernel files and libraries in /tmp
 	# This part is only useful if you're cross-compiling the kernel, of course
