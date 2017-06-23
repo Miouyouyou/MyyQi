@@ -1,0 +1,50 @@
+From 2a7ea0851f0bd88c68aeb0e61d55dd21b19ae6fe Mon Sep 17 00:00:00 2001
+From: Myy <myy@miouyouyou.fr>
+Date: Fri, 23 Jun 2017 02:54:45 +0000
+Subject: [PATCH 2/2] Tinkerboard DTS : Added GPIO Bluetooth RFKILL subsystem
+ references
+
+... This should make the rfkill-bt driver react and try to handle
+the RFKILL subsystem of the Bluetooth chip used on Tinkerboards.
+
+However...
+
+		pinctrl-names = "default","rts_gpio";
+		pinctrl-0 = <&uart0_rts>;
+		pinctrl-1 = <&uart0_gpios>;
+
+Might have been what was really missing in the end.
+We'll see if it works now.
+
+Signed-off-by: Myy <myy@miouyouyou.fr>
+---
+ arch/arm/boot/dts/rk3288-tinker.dts | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
+
+diff --git a/arch/arm/boot/dts/rk3288-tinker.dts b/arch/arm/boot/dts/rk3288-tinker.dts
+index 1e8dd20..e1ec7e1 100644
+--- a/arch/arm/boot/dts/rk3288-tinker.dts
++++ b/arch/arm/boot/dts/rk3288-tinker.dts
+@@ -55,6 +55,19 @@
+ 		device_type = "memory";
+ 	};
+ 
++	wireless-bluetooth {
++		/* Bluetooth-platdata is added through a patch ! */
++		compatible = "bluetooth-platdata";
++		uart_rts_gpios = <&gpio4 19 GPIO_ACTIVE_LOW>;
++		pinctrl-names = "default","rts_gpio";
++		pinctrl-0 = <&uart0_rts>;
++		pinctrl-1 = <&uart0_gpios>;
++		BT,reset_gpio    = <&gpio4 29 GPIO_ACTIVE_HIGH>;
++		BT,wake_gpio     = <&gpio4 26 GPIO_ACTIVE_HIGH>;
++		BT,wake_host_irq = <&gpio4 31 GPIO_ACTIVE_HIGH>;
++		status = "okay";
++	};
++	
+ 	/* Since wlan-platdata do NOT exist in this kernel,
+ 	   I don't know if the 'compatible' part is really
+ 	   necessary... */
+-- 
+2.10.2
+

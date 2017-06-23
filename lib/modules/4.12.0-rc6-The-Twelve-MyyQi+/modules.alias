@@ -2826,3 +2826,5 @@ alias of:N*T*Csimple-scu-audio-card snd_soc_simple_scu_card
 alias of:N*T*Crenesas,rsrc-cardC* snd_soc_simple_scu_card
 alias of:N*T*Crenesas,rsrc-card snd_soc_simple_scu_card
 alias bt-proto-4 bnep
+alias of:N*T*Cbluetooth-platdataC* rfkill_bt
+alias of:N*T*Cbluetooth-platdata rfkill_bt

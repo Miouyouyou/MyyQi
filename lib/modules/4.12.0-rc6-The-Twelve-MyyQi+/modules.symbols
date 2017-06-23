@@ -677,6 +677,7 @@ alias symbol:rpi_firmware_property raspberrypi
 alias symbol:ath9k_hw_set_tx_filter ath9k_hw
 alias symbol:smscore_start_device smsmdtv
 alias symbol:_rtl92c_phy_rf_serial_read rtl8192c_common
+alias symbol:rfkill_rk_sleep_bt rfkill_bt
 alias symbol:snd_hdac_power_down snd_hda_core
 alias symbol:cs4271_dt_ids snd_soc_cs4271
 alias symbol:rtl8723_phy_path_adda_on rtl8723_common
