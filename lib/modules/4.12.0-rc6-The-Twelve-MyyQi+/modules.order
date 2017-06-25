@@ -418,4 +418,5 @@ kernel/sound/soc/generic/snd-soc-simple-scu-card.ko
 kernel/sound/hda/snd-hda-core.ko
 kernel/sound/ac97_bus.ko
 kernel/net/bluetooth/bnep/bnep.ko
+kernel/net/rfkill/rfkill-gpio.ko
 kernel/net/rfkill/rfkill-bt.ko
