@@ -65,6 +65,7 @@ export KERNEL_PATCHES="
 0021-Modified-uart0-definition-on-Tinkerboard-DTS-to-get-.patch
 0022-Another-Tinkerboard-BT-Test-patch.patch
 0023-The-tinkerboard-boot-fix-AGAIN.patch
+0024-More-logging-to-identify-the-reboot-issue.patch
 0100-First-Mali-integration-test-for-ASUS-Tinkerboards.patch
 0200-The-Tinkerboard-DTS-file-maintained-by-TonyMac32-and.patch
 0300-Adding-Mali-Midgard-and-VCodec-support-to-Firefly-RK.patch

@@ -1,0 +1,63 @@
+From e0ab7fdd2b9725bfc89fadfcd486461f451086b1 Mon Sep 17 00:00:00 2001
+From: Myy <myy@miouyouyou.fr>
+Date: Fri, 30 Jun 2017 20:55:02 +0000
+Subject: [PATCH] More logging to identify the reboot issue
+
+This time, logging voltage changes and MMC driver removal.
+
+Signed-off-by: Myy <myy@miouyouyou.fr>
+---
+ drivers/mmc/host/dw_mmc-rockchip.c  | 6 +++++-
+ drivers/regulator/rk808-regulator.c | 4 ++++
+ 2 files changed, 9 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/mmc/host/dw_mmc-rockchip.c b/drivers/mmc/host/dw_mmc-rockchip.c
+index 7a89e99..fa068e2 100644
+--- a/drivers/mmc/host/dw_mmc-rockchip.c
++++ b/drivers/mmc/host/dw_mmc-rockchip.c
+@@ -357,6 +357,7 @@ static int dw_mci_rockchip_probe(struct platform_device *pdev)
+ 
+ static int dw_mci_rockchip_remove(struct platform_device *pdev)
+ {
++	printk(KERN_ERR "( Myy ) MMC driver being removed !!\n");
+ 	pm_runtime_get_sync(&pdev->dev);
+ 	pm_runtime_disable(&pdev->dev);
+ 	pm_runtime_put_noidle(&pdev->dev);
+@@ -391,8 +392,11 @@ static void dw_mci_rockchip_platfm_shutdown(struct platform_device *pdev)
+ 	struct dw_mci *host = platform_get_drvdata(pdev);
+ 	struct mmc_host *mmc = host->cur_slot->mmc;
+ 
+-	if (!IS_ERR(mmc->supply.vqmmc))
++	printk(KERN_ERR "( Myy ) Shuting down !\n");
++	if (!IS_ERR(mmc->supply.vqmmc)) {
++		printk(KERN_ERR "( Myy ) Changing the MMC voltage !\n");
+ 		regulator_set_voltage(mmc->supply.vqmmc, 3000000, 3300000);
++	}
+ }
+ 
+ static int dw_mci_rockchip_setup_tinker_reboot_fix(char *str)
+diff --git a/drivers/regulator/rk808-regulator.c b/drivers/regulator/rk808-regulator.c
+index a16d814..a09a9d9 100644
+--- a/drivers/regulator/rk808-regulator.c
++++ b/drivers/regulator/rk808-regulator.c
+@@ -273,6 +273,8 @@ static int rk808_set_suspend_voltage(struct regulator_dev *rdev, int uv)
+ 	unsigned int reg;
+ 	int sel = regulator_map_voltage_linear(rdev, uv, uv);
+ 
++	dev_err(&rdev->dev, "( Myy ) Setting suspend voltage to %d\n", uv);
++	
+ 	if (sel < 0)
+ 		return -EINVAL;
+ 
+@@ -288,6 +290,8 @@ static int rk808_set_suspend_voltage_range(struct regulator_dev *rdev, int uv)
+ 	unsigned int reg;
+ 	int sel = regulator_map_voltage_linear_range(rdev, uv, uv);
+ 
++	dev_err(&rdev->dev, "( Myy ) Setting suspend voltage range to %d\n", uv);
++	
+ 	if (sel < 0)
+ 		return -EINVAL;
+ 
+-- 
+2.10.2
+
