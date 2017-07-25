@@ -30,14 +30,14 @@ rk3288-veyron-speedy.dtb
 export KERNEL_GIT_URL=git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git
 export KERNEL_SERIES=v4.12
 export KERNEL_BRANCH=linux-4.12.y
-export KERNEL_VERSION=4.12.0
+export KERNEL_VERSION=4.12.3
 export MYY_VERSION=-The-Twelve-MyyQi+
 export MALI_VERSION=r17p0-01rel0
 export MALI_BASE_URL=https://developer.arm.com/-/media/Files/downloads/mali-drivers/kernel/mali-midgard-gpu
 
 export GITHUB_REPO=Miouyouyou/MyyQi
-export GIT_BRANCH=master
-export GIT_TAG=v4.12-Released-p1
+export GIT_BRANCH=stable
+export GIT_TAG=v4.12.3
 
 export BASE_FILES_URL=https://raw.githubusercontent.com
 export PATCHES_FOLDER_URL=$BASE_FILES_URL/$GITHUB_REPO/$GIT_TAG/patches
