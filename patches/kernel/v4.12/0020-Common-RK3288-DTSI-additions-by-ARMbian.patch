@@ -1,0 +1,171 @@
+From 388373a5561409d916d78e4139381d6131ad7c04 Mon Sep 17 00:00:00 2001
+From: Myy <myy@miouyouyou.fr>
+Date: Tue, 25 Jul 2017 20:25:16 +0000
+Subject: [PATCH] Common RK3288 DTSI additions by ARMbian
+
+Mostly picked up from the Rockchip 4.4 kernel.
+
+In the rk3288.dtsi, this :
+Adds :
+* The RGA node address
+
+Defines :
+* The EDP power domains
+* The address and size cells of the MMC slots
+* A second missing register address on the Video Output nodes.
+
+In the rk3288-tinker.dtsi, this :
+Fixes :
+* The memory node address (?)
+
+Defines :
+* The SD Input Output to be always on and started on boot.
+* The EEPROM attached to the i2c2 node. Seems to be used to read and
+  save the randomly generated Ethernet MAC Address.
+* Which pins controls the CTS / RTS signals on the first serial port.
+
+Signed-off-by: Myy <myy@miouyouyou.fr>
+---
+ arch/arm/boot/dts/rk3288-tinker.dts | 14 +++++++++++---
+ arch/arm/boot/dts/rk3288.dtsi       | 26 ++++++++++++++++++++++++--
+ 2 files changed, 35 insertions(+), 5 deletions(-)
+
+diff --git a/arch/arm/boot/dts/rk3288-tinker.dts b/arch/arm/boot/dts/rk3288-tinker.dts
+index 1e8dd203..88cce8dd 100644
+--- a/arch/arm/boot/dts/rk3288-tinker.dts
++++ b/arch/arm/boot/dts/rk3288-tinker.dts
+@@ -50,7 +50,7 @@
+ 	model = "Rockchip RK3288 Tinker Board";
+ 	compatible = "asus,rk3288-tinker", "rockchip,rk3288";
+ 
+-	memory {
++	memory@0 {
+ 		reg = <0x0 0x80000000>;
+ 		device_type = "memory";
+ 	};
+@@ -318,6 +318,8 @@
+ 			};
+ 
+ 			vccio_sd: LDO_REG5 {
++				regulator-always-on;
++				regulator-boot-on;
+ 				regulator-min-microvolt = <1800000>;
+ 				regulator-max-microvolt = <3300000>;
+ 				regulator-name = "vccio_sd";
+@@ -389,6 +391,10 @@
+ 
+ &i2c2 {
+ 	status = "okay";
++	eeprom:m24c08@50 {
++		compatible = "at,24c08";
++		reg = <0x50>;
++	};
+ };
+ 
+ &i2c3 {
+@@ -558,10 +564,10 @@
+ 	bus-width = <4>;
+ 	cap-mmc-highspeed;
+ 	cap-sd-highspeed;
+-	/*sd-uhs-sdr12;
++	sd-uhs-sdr12;
+ 	sd-uhs-sdr25;
+ 	sd-uhs-sdr50;
+-	sd-uhs-sdr104;*/
++	sd-uhs-sdr104;
+ 	card-detect-delay = <200>;
+ 	disable-wp;			/* wp not hooked up */
+ 	num-slots = <1>;
+@@ -581,6 +587,8 @@
+ 
+ &uart0 {
+ 	status = "okay";
++	pinctrl-names = "default";
++	pinctrl-0 = <&uart0_xfer>, <&uart0_cts>;
+ };
+ 
+ &uart1 {
+diff --git a/arch/arm/boot/dts/rk3288.dtsi b/arch/arm/boot/dts/rk3288.dtsi
+index 44c7a2df..29ad66ff 100644
+--- a/arch/arm/boot/dts/rk3288.dtsi
++++ b/arch/arm/boot/dts/rk3288.dtsi
+@@ -349,6 +349,8 @@
+ 		clock-names = "biu", "ciu", "ciu-drive", "ciu-sample";
+ 		fifo-depth = <0x100>;
+ 		interrupts = <GIC_SPI 32 IRQ_TYPE_LEVEL_HIGH>;
++		#address-cells = <1>;
++		#size-cells = <0>;
+ 		reg = <0xff0c0000 0x4000>;
+ 		resets = <&cru SRST_MMC0>;
+ 		reset-names = "reset";
+@@ -363,6 +365,8 @@
+ 		clock-names = "biu", "ciu", "ciu-drive", "ciu-sample";
+ 		fifo-depth = <0x100>;
+ 		interrupts = <GIC_SPI 33 IRQ_TYPE_LEVEL_HIGH>;
++		#address-cells = <1>;
++		#size-cells = <0>;
+ 		reg = <0xff0d0000 0x4000>;
+ 		resets = <&cru SRST_SDIO0>;
+ 		reset-names = "reset";
+@@ -375,6 +379,8 @@
+ 		clocks = <&cru HCLK_SDIO1>, <&cru SCLK_SDIO1>,
+ 			 <&cru SCLK_SDIO1_DRV>, <&cru SCLK_SDIO1_SAMPLE>;
+ 		clock-names = "biu", "ciu", "ciu-drive", "ciu-sample";
++		#address-cells = <1>;
++		#size-cells = <0>;
+ 		fifo-depth = <0x100>;
+ 		interrupts = <GIC_SPI 34 IRQ_TYPE_LEVEL_HIGH>;
+ 		reg = <0xff0e0000 0x4000>;
+@@ -389,6 +395,8 @@
+ 		clocks = <&cru HCLK_EMMC>, <&cru SCLK_EMMC>,
+ 			 <&cru SCLK_EMMC_DRV>, <&cru SCLK_EMMC_SAMPLE>;
+ 		clock-names = "biu", "ciu", "ciu-drive", "ciu-sample";
++		#address-cells = <1>;
++		#size-cells = <0>;
+ 		fifo-depth = <0x100>;
+ 		interrupts = <GIC_SPI 35 IRQ_TYPE_LEVEL_HIGH>;
+ 		reg = <0xff0f0000 0x4000>;
+@@ -1027,7 +1035,7 @@
+ 		status = "disabled";
+ 	};
+ 
+-	spdif: sound@ff88b0000 {
++	spdif: sound@ff8b0000 {
+ 		compatible = "rockchip,rk3288-spdif", "rockchip,rk3066-spdif";
+ 		reg = <0xff8b0000 0x10000>;
+ 		#sound-dai-cells = <0>;
+@@ -1071,9 +1079,22 @@
+ 		status = "okay";
+ 	};
+ 
++	rga: rga@ff920000 {
++		compatible = "rockchip,rk3288-rga";
++		reg = <0xff920000 0x180>;
++		interrupts = <GIC_SPI 18 IRQ_TYPE_LEVEL_HIGH>;
++		interrupt-names = "rga";
++		clocks = <&cru ACLK_RGA>, <&cru HCLK_RGA>, <&cru SCLK_RGA>;
++		clock-names = "aclk", "hclk", "sclk";
++		power-domains = <&power RK3288_PD_VIO>;
++		resets = <&cru SRST_RGA_CORE>, <&cru SRST_RGA_AXI>, <&cru SRST_RGA_AHB>;
++		reset-names = "core", "axi", "ahb";
++		status = "disabled";
++	};
++
+ 	vopb: vop@ff930000 {
+ 		compatible = "rockchip,rk3288-vop";
+-		reg = <0xff930000 0x19c>;
++		reg = <0xff930000 0x19c>, <0xff931000 0x1000>;
+ 		interrupts = <GIC_SPI 15 IRQ_TYPE_LEVEL_HIGH>;
+ 		clocks = <&cru ACLK_VOP0>, <&cru DCLK_VOP0>, <&cru HCLK_VOP0>;
+ 		clock-names = "aclk_vop", "dclk_vop", "hclk_vop";
+@@ -1191,6 +1212,7 @@
+ 		interrupts = <GIC_SPI 98 IRQ_TYPE_LEVEL_HIGH>;
+ 		clocks = <&cru SCLK_EDP>, <&cru PCLK_EDP_CTRL>;
+ 		clock-names = "dp", "pclk";
++		power-domains = <&power RK3288_PD_VIO>;
+ 		phys = <&edp_phy>;
+ 		phy-names = "dp";
+ 		resets = <&cru SRST_EDP>;
+-- 
+2.13.0
+

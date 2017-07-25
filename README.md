@@ -85,6 +85,8 @@ export KERNEL_PATCHES="
 0016-Added-support-for-Tinkerboard-s-SPI-interface.patch
 0017-Testing-DTS-changes-in-order-to-resolve-bug-8.patch
 0018-Added-debug-messages-to-check-the-Bluetooth-Coexiste.patch
+0019-The-ASUS-Tinkerboard-reboot-patch.patch
+0020-Common-RK3288-DTSI-additions-by-ARMbian.patch
 0100-First-Mali-integration-test-for-ASUS-Tinkerboards.patch
 0200-The-Tinkerboard-DTS-file-maintained-by-TonyMac32-and.patch
 0300-Adding-Mali-Midgard-and-VCodec-support-to-Firefly-RK.patch
