@@ -12,18 +12,24 @@ See the [RockMyy](https://github.com/Miouyouyou/RockMyy) branch !
 About this branch
 -----------------
 
-The compilation script of this branch uses the "linux-stable" kernel
-branch. This branch backports a lot of fixes and security patches for
-an eternity and a half.
+The compilation script of this branch uses the 
+**[linux-stable](https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git)**
+kernel branch. The **linux-stable** branch backports a lot of fixes and 
+security patches for an eternity and a half.
 
-Now, basically, the script of this branch will try to retrieve the
-latest "linux-stable" branch, apply the patches, compile and install
-like in the "master" branch.
+Now, basically, the script of this stable branch will try to retrieve
+the latest **linux-stable** branch, apply the patches, cross-compile and
+install the cross-compiled kernel like in the
+**[master](https://github.com/Miouyouyou/MyyQi)** branch.
 
-However I don't care about this kernel branch, since I don't use it.
+The thing is :
+I don't care about the **linux-stable** kernel branch, since I don't use
+it.
 
 So if the patches break in the future, you'll either have to maintain
-them yourselves or show me some money.
+them yourselves or show me the money if you want me to maintain them.
+
+Or try the [latest RC branch](https://github.com/Miouyouyou/RockMyy) !
 
 About
 -----
