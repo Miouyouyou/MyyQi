@@ -9,10 +9,26 @@ If you appreciate this project, support me on Patreon or Pledgie !
 
 See the [RockMyy](https://github.com/Miouyouyou/RockMyy) branch !
 
+About this branch
+-----------------
+
+The compilation script of this branch uses the "linux-stable" kernel
+branch. This branch backports a lot of fixes and security patches for
+an eternity and a half.
+
+Now, basically, the script of this branch will try to retrieve the
+latest "linux-stable" branch, apply the patches, compile and install
+like in the "master" branch.
+
+However I don't care about this kernel branch, since I don't use it.
+
+So if the patches break in the future, you'll either have to maintain
+them yourselves or show me some money.
+
 About
 -----
 
-This is a working patched 4.12 kernel with [Mali r17p0 Kernel drivers](http://malideveloper.arm.com/resources/drivers/open-source-mali-midgard-gpu-kernel-drivers/), using the [torvalds branch](https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/) as a basis. This also integrate patches from Willy Tarreau, making possible to get better performances from the board. [More informations in this thread](https://forum.mqmaker.com/t/miqi-based-build-farm-finally-up-and-running/605).
+This is a working patched 4.12.3 kernel with [Mali r17p0 Kernel drivers](http://malideveloper.arm.com/resources/drivers/open-source-mali-midgard-gpu-kernel-drivers/), using the [torvalds branch](https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/) as a basis. This also integrate patches from Willy Tarreau, making possible to get better performances from the board. [More informations in this thread](https://forum.mqmaker.com/t/miqi-based-build-farm-finally-up-and-running/605).
 
 Currently this kernel has been tested sucessfully with the [Firefly's Mali User-space r12p0 drivers for fbdev and wayland](http://malideveloper.arm.com/resources/drivers/arm-mali-midgard-gpu-user-space-drivers/#mali-user-space-driver-r12p0-mali-t760-gnulinux), using the [OpenGL ES 3.1 and 3.2 samples of the Mali OpenGL ES SDK](http://malideveloper.arm.com/resources/sdks/opengl-es-sdk-for-linux/). Pure DRM OpenGL was also tested successfully with these drivers, using [this patched gl2mark](https://github.com/Miouyouyou/glmark2).
 
@@ -51,16 +67,17 @@ rk3288-veyron-pinky.dtb
 rk3288-veyron-speedy.dtb
 "
 
+export KERNEL_GIT_URL=git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git
 export KERNEL_SERIES=v4.12
-export KERNEL_BRANCH=v4.12
-export KERNEL_VERSION=4.12.0
+export KERNEL_BRANCH=linux-4.12.y
+export KERNEL_VERSION=4.12.3
 export MYY_VERSION=-The-Twelve-MyyQi+
 export MALI_VERSION=r17p0-01rel0
 export MALI_BASE_URL=https://developer.arm.com/-/media/Files/downloads/mali-drivers/kernel/mali-midgard-gpu
 
 export GITHUB_REPO=Miouyouyou/MyyQi
-export GIT_BRANCH=master
-export GIT_TAG=v4.12-Released-p1
+export GIT_BRANCH=stable
+export GIT_TAG=v4.12.3
 
 export BASE_FILES_URL=https://raw.githubusercontent.com
 export PATCHES_FOLDER_URL=$BASE_FILES_URL/$GITHUB_REPO/$GIT_TAG/patches
@@ -102,6 +119,13 @@ export MALI_PATCHES="
 
 # -- Helper functions
 
+function die_on_error {
+	if [ ! $? = 0 ]; then
+		echo $1
+		exit 1
+	fi
+}
+
 function download_patches {
 	base_url=$1
 	patches=${@:2}
@@ -137,9 +161,11 @@ function copy_and_apply_patches {
 # If we haven't already clone the Linux Kernel tree, clone it and move
 # into the linux folder created during the cloning.
 if [ ! -d "linux" ]; then
-  git clone --depth 1 --branch $KERNEL_BRANCH 'git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git'
+  git clone --depth 1 --branch $KERNEL_BRANCH $KERNEL_GIT_URL linux
+  die_on_error "Could not Git the kernel"
 fi
 cd linux
+die_on_error "No linux folder !?"
 export SRC_DIR=$PWD
 
 # Check if the tree is patched

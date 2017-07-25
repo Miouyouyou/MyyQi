@@ -27,8 +27,9 @@ rk3288-veyron-pinky.dtb
 rk3288-veyron-speedy.dtb
 "
 
+export KERNEL_GIT_URL=git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git
 export KERNEL_SERIES=v4.12
-export KERNEL_BRANCH=v4.12
+export KERNEL_BRANCH=linux-4.12.y
 export KERNEL_VERSION=4.12.0
 export MYY_VERSION=-The-Twelve-MyyQi+
 export MALI_VERSION=r17p0-01rel0
@@ -78,6 +79,13 @@ export MALI_PATCHES="
 
 # -- Helper functions
 
+function die_on_error {
+	if [ ! $? = 0 ]; then
+		echo $1
+		exit 1
+	fi
+}
+
 function download_patches {
 	base_url=$1
 	patches=${@:2}
@@ -113,9 +121,11 @@ function copy_and_apply_patches {
 # If we haven't already clone the Linux Kernel tree, clone it and move
 # into the linux folder created during the cloning.
 if [ ! -d "linux" ]; then
-  git clone --depth 1 --branch $KERNEL_BRANCH 'git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git'
+  git clone --depth 1 --branch $KERNEL_BRANCH $KERNEL_GIT_URL linux
+  die_on_error "Could not Git the kernel"
 fi
 cd linux
+die_on_error "No linux folder !?"
 export SRC_DIR=$PWD
 
 # Check if the tree is patched
